@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import {
   Activity,
   ArrowRight,
