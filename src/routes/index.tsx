@@ -658,25 +658,19 @@ function DemoCTA({ onDemo }: { onDemo: () => void }) {
 /* ────────────────────────────  PAGE  ──────────────────────────── */
 
 function HomePage() {
-  const [demoOpen, setDemoOpen] = useState(false);
-  const openDemo = () => setDemoOpen(true);
+  const { openDemo } = useDemo();
   return (
     <>
-      <Navbar onRequestDemo={openDemo} />
-      <main>
-        <Hero onDemo={openDemo} />
-        <Problem />
-        <Solution />
-        <HowItWorks />
-        <WhoWeServe />
-        <Capabilities />
-        <Why />
-        <Security />
-        <FAQ />
-        <DemoCTA onDemo={openDemo} />
-      </main>
-      <Footer />
-      <DemoModal open={demoOpen} onOpenChange={setDemoOpen} />
+      <Hero onDemo={openDemo} />
+      <Problem />
+      <Solution />
+      <HowItWorks />
+      <WhoWeServe />
+      <Capabilities />
+      <Why />
+      <Security />
+      <FAQ />
+      <DemoCTA onDemo={openDemo} />
     </>
   );
 }
