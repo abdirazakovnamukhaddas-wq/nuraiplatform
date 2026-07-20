@@ -39,10 +39,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Container } from "@/components/layout/Container";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { SectionHeading } from "@/components/layout/SectionHeading";
-import { DemoModal } from "@/components/DemoModal";
+import { useDemo } from "@/lib/demo-context";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
