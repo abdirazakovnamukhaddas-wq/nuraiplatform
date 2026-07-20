@@ -12,8 +12,10 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "../lib/i18n";
+import { DemoProvider, useDemo } from "../lib/demo-context";
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
+import { DemoModal } from "../components/DemoModal";
 
 function NotFoundComponent() {
   return (
@@ -132,14 +134,24 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <div className="flex min-h-dvh flex-col bg-background">
-          <Navbar />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
+        <DemoProvider>
+          <AppShell />
+        </DemoProvider>
       </I18nProvider>
     </QueryClientProvider>
+  );
+}
+
+function AppShell() {
+  const { open, setOpen, openDemo } = useDemo();
+  return (
+    <div className="flex min-h-dvh flex-col bg-background">
+      <Navbar onRequestDemo={openDemo} />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+      <DemoModal open={open} onOpenChange={setOpen} />
+    </div>
   );
 }
