@@ -45,6 +45,9 @@ import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
+  head: () => ({
+    links: [{ rel: "canonical", href: "/" }],
+  }),
 });
 
 const fadeUp: Variants = {

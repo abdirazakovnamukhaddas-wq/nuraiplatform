@@ -188,6 +188,21 @@ const en: Dict = {
   "demo.f.type.social": "Social care institution",
   "demo.f.type.ngo": "NGO",
   "demo.f.type.other": "Other",
+  "demo.f.type.placeholder": "Select institution type",
+  "demo.f.required": "Required",
+  "demo.f.optional": "Optional",
+  "demo.f.err.institution": "Please enter your institution name.",
+  "demo.f.err.rep": "Please enter your name.",
+  "demo.f.err.role": "Please enter your role.",
+  "demo.f.err.email": "Enter a valid email address.",
+  "demo.f.err.phone": "Enter a valid phone number.",
+  "demo.f.err.type": "Please select an institution type.",
+  "demo.f.err.consent": "Please accept the Privacy Policy to continue.",
+  "demo.f.error.title": "Something went wrong.",
+  "demo.f.error.body":
+    "Your request couldn't be sent. Your information is safe — please try again.",
+  "demo.f.retry": "Try again",
+  "demo.f.back": "Back to form",
 
   // Footer
   "footer.mission":
