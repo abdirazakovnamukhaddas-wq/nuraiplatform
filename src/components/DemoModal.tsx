@@ -160,7 +160,24 @@ export function DemoModal({
     }
     setStatus("submitting");
     try {
-      await new Promise((r) => setTimeout(r, 900));
+      const res = await fetch(DEMO_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `NUR.AI Demo Request — ${form.institution}`,
+          _template: "table",
+          Institution: form.institution,
+          Representative: form.rep,
+          Position: form.role,
+          Email: form.email,
+          Phone: form.phone,
+          Type: form.type,
+          Cameras: form.cameras || "—",
+          Beneficiaries: form.children || "—",
+          Message: form.message || "—",
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setStatus("success");
     } catch {
       setStatus("error");
