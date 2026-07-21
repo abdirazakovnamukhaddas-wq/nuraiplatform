@@ -159,6 +159,11 @@ function Hero({ onDemo }: { onDemo: () => void }) {
 
 function HeroVisual() {
   const { t } = useI18n();
+  const rows = [
+    { icon: Activity, label: t("hero.row.attention") },
+    { icon: Users, label: t("hero.row.group") },
+    { icon: UserRound, label: t("hero.row.individual") },
+  ];
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -170,19 +175,15 @@ function HeroVisual() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
             <span className="inline-flex h-2 w-2 rounded-full bg-success" aria-hidden />
-            Assistive signal
+            {t("hero.card.signal")}
           </div>
           <span className="rounded-full bg-surface-muted px-2 py-0.5 text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-            Human review required
+            {t("hero.card.review")}
           </span>
         </div>
 
         <div className="mt-4 space-y-3">
-          {[
-            { icon: Activity, label: "Attention pattern shift" },
-            { icon: Users, label: "Group dynamic — check-in suggested" },
-            { icon: UserRound, label: "Individual well-being cue" },
-          ].map((row, i) => (
+          {rows.map((row, i) => (
             <motion.div
               key={row.label}
               initial={{ opacity: 0, x: -8 }}
@@ -196,7 +197,7 @@ function HeroVisual() {
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-foreground">{row.label}</p>
                 <p className="text-xs text-muted-foreground">
-                  Suggestion · reviewable · non-diagnostic
+                  {t("hero.card.suggestion")}
                 </p>
               </div>
               <ArrowRight className="h-4 w-4 text-muted-foreground" aria-hidden />
@@ -209,7 +210,7 @@ function HeroVisual() {
             <ShieldCheck className="h-4 w-4 text-accent" aria-hidden />
             <span className="font-medium">{t("hero.badge_hitl")}</span>
           </div>
-          <span className="text-xs opacity-80">AI assists · humans decide</span>
+          <span className="text-xs opacity-80">{t("hero.card.tag")}</span>
         </div>
       </div>
 
@@ -220,6 +221,7 @@ function HeroVisual() {
     </motion.div>
   );
 }
+
 
 /* ────────────────────────────  PROBLEM  ──────────────────────────── */
 
@@ -318,10 +320,10 @@ function Solution() {
           >
             <div className="grid grid-cols-2 gap-3">
               {[
-                { icon: Camera, label: "Existing camera" },
-                { icon: Bot, label: "Assistive AI" },
-                { icon: BellRing, label: "Quiet alert" },
-                { icon: UserCheck, label: "Human decision" },
+                { icon: Camera, label: t("solution.node.camera") },
+                { icon: Bot, label: t("solution.node.ai") },
+                { icon: BellRing, label: t("solution.node.alert") },
+                { icon: UserCheck, label: t("solution.node.human") },
               ].map((n) => (
                 <div
                   key={n.label}
@@ -334,6 +336,7 @@ function Solution() {
                 </div>
               ))}
             </div>
+
           </motion.div>
         </div>
       </Container>
@@ -385,8 +388,9 @@ function HowItWorks() {
                   <CardContent className="flex items-center justify-between gap-4 p-5">
                     <div>
                       <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                        Step {i + 1}
+                        {t("how.step")} {i + 1}
                       </p>
+
                       <h3 className="mt-1 text-base font-semibold text-foreground">
                         {t(`how.${s.key}.title`)}
                       </h3>
