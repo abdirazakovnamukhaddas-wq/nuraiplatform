@@ -52,6 +52,11 @@ const initial: FormState = {
 type Errors = Partial<Record<keyof FormState, string>>;
 type Status = "idle" | "submitting" | "success" | "error";
 
+// Destination email for demo requests. Structured as a single constant to
+// allow safe migration to demo@nur.ai.uz without touching submission logic.
+const DEMO_EMAIL = "nurai.platform@gmail.com";
+const DEMO_ENDPOINT = `https://formsubmit.co/ajax/${DEMO_EMAIL}`;
+
 const REQUIRED: (keyof FormState)[] = [
   "institution",
   "rep",
