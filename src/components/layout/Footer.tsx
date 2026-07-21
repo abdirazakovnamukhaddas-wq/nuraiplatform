@@ -57,8 +57,9 @@ export function Footer() {
 
         <div className="text-sm">
           <p className="mb-3 text-xs font-semibold tracking-wide text-foreground uppercase">
-            Legal
+            {t("footer.legal")}
           </p>
+
           <ul className="space-y-2 text-muted-foreground">
             <li>
               <a href="#" className="hover:text-foreground">

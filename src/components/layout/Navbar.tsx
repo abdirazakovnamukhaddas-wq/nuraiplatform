@@ -67,7 +67,7 @@ export function Navbar({ onRequestDemo }: { onRequestDemo: () => void }) {
       <Container className="flex h-16 items-center justify-between gap-4">
         <Wordmark />
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={t("nav.primary")}>
           {links.map((l) => (
             <a
               key={l.href}
@@ -87,7 +87,7 @@ export function Navbar({ onRequestDemo }: { onRequestDemo: () => void }) {
           </Button>
           <button
             type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t("nav.close_menu") : t("nav.open_menu")}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-foreground lg:hidden"
