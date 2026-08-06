@@ -148,6 +148,17 @@ function Hero({ onDemo }: { onDemo: () => void }) {
               <ShieldCheck className="h-4 w-4 text-success" aria-hidden />
               {t("hero.badge_hitl")}
             </motion.div>
+
+            <motion.p
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              custom={5}
+              className="mt-3 max-w-xl text-xs leading-relaxed text-muted-foreground"
+            >
+              {t("hero.trust")}
+            </motion.p>
+
           </div>
 
           <HeroVisual />
