@@ -34,21 +34,21 @@ export function Footer() {
           <ul className="space-y-2 text-muted-foreground">
             <li>
               <a
-                href="mailto:hello@nur.ai"
-                className="inline-flex items-center gap-2 hover:text-foreground"
+                href="mailto:nurai.platform@gmail.com"
+                className="inline-flex items-center gap-2 break-all hover:text-foreground"
               >
-                <Mail className="h-4 w-4" aria-hidden />
-                hello@nur.ai
+                <Mail className="h-4 w-4 shrink-0" aria-hidden />
+                nurai.platform@gmail.com
               </a>
             </li>
             <li>
               <a
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/company/nur-ai-platform"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 hover:text-foreground"
               >
-                <Linkedin className="h-4 w-4" aria-hidden />
+                <Linkedin className="h-4 w-4 shrink-0" aria-hidden />
                 LinkedIn
               </a>
             </li>
