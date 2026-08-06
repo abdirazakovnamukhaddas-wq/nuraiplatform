@@ -713,7 +713,7 @@ function DemoCTA({ onDemo }: { onDemo: () => void }) {
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <a
-                  href="mailto:nurai.platform@gmail.com"
+                  href={`mailto:${t("contact.email_value")}`}
                   className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
                 >
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
@@ -723,8 +723,8 @@ function DemoCTA({ onDemo }: { onDemo: () => void }) {
                     <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
                       {t("contact.email")}
                     </span>
-                    <span className="block truncate text-sm font-medium">
-                      nurai.platform@gmail.com
+                    <span className="block break-all text-sm font-medium">
+                      {t("contact.email_value")}
                     </span>
                   </span>
                 </a>
