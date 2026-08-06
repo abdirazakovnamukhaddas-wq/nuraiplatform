@@ -129,6 +129,7 @@ const en: Dict = {
 
   // Contact
   "contact.email": "Email",
+  "contact.email_value": "nurai.platform@gmail.com",
   "contact.linkedin": "LinkedIn",
   "contact.linkedin_desc": "Official NUR.AI LinkedIn page",
 
@@ -379,6 +380,7 @@ const uz: Dict = {
 
   // Contact
   "contact.email": "Elektron pochta",
+  "contact.email_value": "nurai.platform@gmail.com",
   "contact.linkedin": "LinkedIn",
   "contact.linkedin_desc": "NUR.AI rasmiy LinkedIn sahifasi",
 
@@ -622,6 +624,7 @@ const ru: Dict = {
 
   // Contact
   "contact.email": "Эл. почта",
+  "contact.email_value": "nurai.platform@gmail.com",
   "contact.linkedin": "LinkedIn",
   "contact.linkedin_desc": "Официальная страница NUR.AI в LinkedIn",
 
@@ -865,6 +868,7 @@ const kk: Dict = {
 
   // Contact
   "contact.email": "Elektron pochta",
+  "contact.email_value": "nurai.platform@gmail.com",
   "contact.linkedin": "LinkedIn",
   "contact.linkedin_desc": "NUR.AI rásmiy LinkedIn beti",
 
