@@ -710,6 +710,43 @@ function DemoCTA({ onDemo }: { onDemo: () => void }) {
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/80 sm:text-base">
                 {t("demo.subtitle")}
               </p>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <a
+                  href="mailto:nurai.platform@gmail.com"
+                  className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
+                    <Mail className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
+                      {t("contact.email")}
+                    </span>
+                    <span className="block truncate text-sm font-medium">
+                      nurai.platform@gmail.com
+                    </span>
+                  </span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/nur-ai-platform"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
+                    <Linkedin className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
+                      {t("contact.linkedin")}
+                    </span>
+                    <span className="block truncate text-sm font-medium">
+                      {t("contact.linkedin_desc")}
+                    </span>
+                  </span>
+                </a>
+              </div>
             </div>
             <div className="flex md:justify-end">
               <Button size="lg" variant="secondary" onClick={onDemo}>
@@ -739,6 +776,7 @@ function HomePage() {
       <Why />
       <Security />
       <FAQ />
+      <Insights />
       <DemoCTA onDemo={openDemo} />
     </>
   );
