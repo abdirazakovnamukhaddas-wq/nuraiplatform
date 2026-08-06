@@ -34,11 +34,11 @@ export function Footer() {
           <ul className="space-y-2 text-muted-foreground">
             <li>
               <a
-                href="mailto:nurai.platform@gmail.com"
+                href={`mailto:${t("contact.email_value")}`}
                 className="inline-flex items-center gap-2 break-all hover:text-foreground"
               >
                 <Mail className="h-4 w-4 shrink-0" aria-hidden />
-                nurai.platform@gmail.com
+                {t("contact.email_value")}
               </a>
             </li>
             <li>
