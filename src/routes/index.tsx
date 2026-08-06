@@ -426,12 +426,14 @@ function HowItWorks() {
 function WhoWeServe() {
   const { t } = useI18n();
   const items = [
+    { icon: Baby, key: "kinder" },
     { icon: GraduationCap, key: "schools" },
-    { icon: HeartPulse, key: "rehab" },
     { icon: Activity, key: "health" },
     { icon: Landmark, key: "gov" },
+    { icon: HeartPulse, key: "rehab" },
     { icon: HandHeart, key: "social" },
     { icon: Users, key: "ngo" },
+
   ] as const;
   return (
     <section id="institutions" className="border-t border-border bg-surface py-20 sm:py-24">
