@@ -5,6 +5,7 @@ import {
   Activity,
   AlertTriangle,
   ArrowRight,
+  Baby,
   BellRing,
   Bot,
   Camera,
@@ -18,9 +19,14 @@ import {
   HeartPulse,
   Landmark,
   Layers,
+  Lightbulb,
+  Linkedin,
+  Mail,
+  MessageSquare,
   Lock,
   MonitorSmartphone,
   Rocket,
+  Route as RouteIcon,
   ShieldCheck,
   Sparkles,
   UserCheck,
@@ -148,6 +154,17 @@ function Hero({ onDemo }: { onDemo: () => void }) {
               <ShieldCheck className="h-4 w-4 text-success" aria-hidden />
               {t("hero.badge_hitl")}
             </motion.div>
+
+            <motion.p
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              custom={5}
+              className="mt-3 max-w-xl text-xs leading-relaxed text-muted-foreground"
+            >
+              {t("hero.trust")}
+            </motion.p>
+
           </div>
 
           <HeroVisual />
@@ -415,12 +432,14 @@ function HowItWorks() {
 function WhoWeServe() {
   const { t } = useI18n();
   const items = [
+    { icon: Baby, key: "kinder" },
     { icon: GraduationCap, key: "schools" },
-    { icon: HeartPulse, key: "rehab" },
     { icon: Activity, key: "health" },
     { icon: Landmark, key: "gov" },
+    { icon: HeartPulse, key: "rehab" },
     { icon: HandHeart, key: "social" },
     { icon: Users, key: "ngo" },
+
   ] as const;
   return (
     <section id="institutions" className="border-t border-border bg-surface py-20 sm:py-24">
@@ -619,7 +638,50 @@ function FAQ() {
   );
 }
 
+/* ────────────────────────────  REAL USER INSIGHTS  ──────────────────────────── */
+
+function Insights() {
+  const { t } = useI18n();
+  const items = [
+    { icon: MessageSquare, k: "1" },
+    { icon: HeartPulse, k: "2" },
+    { icon: Lightbulb, k: "3" },
+    { icon: RouteIcon, k: "4" },
+  ];
+  return (
+    <section className="border-t border-border bg-surface py-20 sm:py-24">
+      <Container>
+        <SectionHeading eyebrow={t("insights.eyebrow")} title={t("insights.title")} />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((it, i) => (
+            <motion.div
+              key={it.k}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={fadeUp}
+              custom={i}
+              className="group rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-md"
+            >
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-surface-muted text-secondary transition-colors group-hover:bg-secondary group-hover:text-secondary-foreground">
+                <it.icon className="h-5 w-5" aria-hidden />
+              </span>
+              <h3 className="mt-4 text-base font-semibold text-foreground">
+                {t(`insights.${it.k}.title`)}
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                {t(`insights.${it.k}.body`)}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 /* ────────────────────────────  DEMO CTA  ──────────────────────────── */
+
 
 function DemoCTA({ onDemo }: { onDemo: () => void }) {
   const { t } = useI18n();
@@ -648,6 +710,43 @@ function DemoCTA({ onDemo }: { onDemo: () => void }) {
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/80 sm:text-base">
                 {t("demo.subtitle")}
               </p>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <a
+                  href="mailto:nurai.platform@gmail.com"
+                  className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
+                    <Mail className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
+                      {t("contact.email")}
+                    </span>
+                    <span className="block truncate text-sm font-medium">
+                      nurai.platform@gmail.com
+                    </span>
+                  </span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/nur-ai-platform"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
+                    <Linkedin className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
+                      {t("contact.linkedin")}
+                    </span>
+                    <span className="block truncate text-sm font-medium">
+                      {t("contact.linkedin_desc")}
+                    </span>
+                  </span>
+                </a>
+              </div>
             </div>
             <div className="flex md:justify-end">
               <Button size="lg" variant="secondary" onClick={onDemo}>
@@ -677,6 +776,7 @@ function HomePage() {
       <Why />
       <Security />
       <FAQ />
+      <Insights />
       <DemoCTA onDemo={openDemo} />
     </>
   );
