@@ -107,6 +107,30 @@ const en: Dict = {
   "serve.social.body": "Extend the attention of dedicated caregivers.",
   "serve.ngo.title": "NGOs",
   "serve.ngo.body": "Amplify limited resources with responsible technology.",
+  "serve.kinder.title": "Private kindergartens",
+  "serve.kinder.body": "Help educators stay attentive to every child in a busy group.",
+
+  // Hero trust line
+  "hero.trust": "Built from real conversations with kindergarten and rehabilitation professionals.",
+
+  // Real user insights
+  "insights.eyebrow": "Research",
+  "insights.title": "Real user insights",
+  "insights.1.title": "Interview completed",
+  "insights.1.body": "1 private kindergarten specialist.",
+  "insights.2.title": "Early validation",
+  "insights.2.body": "1 rehabilitation center.",
+  "insights.3.title": "Key insight",
+  "insights.3.body":
+    "One educator may supervise around fifteen children simultaneously, each requiring different levels of attention and care.",
+  "insights.4.title": "Next step",
+  "insights.4.body":
+    "15 additional private kindergarten interviews are planned this month to better understand real operational challenges.",
+
+  // Contact
+  "contact.email": "Email",
+  "contact.linkedin": "LinkedIn",
+  "contact.linkedin_desc": "Official NUR.AI LinkedIn page",
 
   // AI Capabilities
   "caps.eyebrow": "AI capabilities",
@@ -129,8 +153,9 @@ const en: Dict = {
   // Why
   "why.eyebrow": "Why NUR.AI",
   "why.title": "Practical advantages, without exaggeration.",
-  "why.1.title": "Works with existing cameras",
-  "why.1.body": "No hardware replacement required.",
+  "why.1.title": "Integrates with existing surveillance systems",
+  "why.1.body":
+    "NUR.AI integrates with supported surveillance systems to analyze video streams using artificial intelligence.",
   "why.2.title": "Human-in-the-loop",
   "why.2.body": "People always make the final call.",
   "why.3.title": "Responsible AI",
@@ -167,8 +192,9 @@ const en: Dict = {
   // FAQ
   "faq.eyebrow": "FAQ",
   "faq.title": "Questions institutions ask us most.",
-  "faq.q1": "Can it work with existing cameras?",
-  "faq.a1": "Yes. NUR.AI is designed to integrate with cameras already installed in your institution.",
+  "faq.q1": "Can NUR.AI integrate with our existing surveillance system?",
+  "faq.a1":
+    "Yes. NUR.AI is designed to integrate with supported surveillance systems while preserving your existing monitoring workflow.",
   "faq.q2": "Does AI replace teachers or specialists?",
   "faq.a2": "No. NUR.AI is assistive. It supports the professionals who are already doing the work.",
   "faq.q3": "Does AI make final decisions?",
@@ -331,6 +357,30 @@ const uz: Dict = {
   "serve.social.body": "Fidoyi parvarishchilar e’tiborini kengaytiradi.",
   "serve.ngo.title": "Nodavlat tashkilotlar",
   "serve.ngo.body": "Cheklangan resurslarni mas’uliyatli texnologiya bilan kuchaytiring.",
+  "serve.kinder.title": "Xususiy bog‘chalar",
+  "serve.kinder.body": "Tarbiyachilarga guruhdagi har bir bolaga e’tiborli bo‘lishda yordam beradi.",
+
+  // Hero trust line
+  "hero.trust": "Bog‘cha va reabilitatsiya mutaxassislari bilan real suhbatlar asosida yaratilgan.",
+
+  // Real user insights
+  "insights.eyebrow": "Tadqiqot",
+  "insights.title": "Real foydalanuvchi tahlillari",
+  "insights.1.title": "O‘tkazilgan intervyu",
+  "insights.1.body": "1 nafar xususiy bog‘cha mutaxassisi.",
+  "insights.2.title": "Dastlabki tasdiq",
+  "insights.2.body": "1 ta reabilitatsiya markazi.",
+  "insights.3.title": "Asosiy xulosa",
+  "insights.3.body":
+    "Bitta tarbiyachi bir vaqtning o‘zida taxminan o‘n besh bolani kuzatishi mumkin va ularning har biri turlicha e’tibor va g‘amxo‘rlik talab qiladi.",
+  "insights.4.title": "Keyingi qadam",
+  "insights.4.body":
+    "Bu oy real operatsion muammolarni chuqurroq tushunish uchun yana 15 ta xususiy bog‘cha bilan intervyu rejalashtirilgan.",
+
+  // Contact
+  "contact.email": "Elektron pochta",
+  "contact.linkedin": "LinkedIn",
+  "contact.linkedin_desc": "NUR.AI rasmiy LinkedIn sahifasi",
 
   "caps.eyebrow": "AI imkoniyatlari",
   "caps.title": "Real, mas’uliyatli aniqlash.",
@@ -351,8 +401,9 @@ const uz: Dict = {
 
   "why.eyebrow": "Nega NUR.AI",
   "why.title": "Bo‘rttirmasdan, amaliy afzalliklar.",
-  "why.1.title": "Mavjud kameralar bilan ishlaydi",
-  "why.1.body": "Uskunani almashtirish shart emas.",
+  "why.1.title": "Mavjud kuzatuv tizimlari bilan integratsiyalashadi",
+  "why.1.body":
+    "NUR.AI qo‘llab-quvvatlanadigan kuzatuv tizimlari bilan integratsiyalashib, video oqimlarni sun’iy intellekt yordamida tahlil qiladi.",
   "why.2.title": "Human-in-the-loop",
   "why.2.body": "Yakuniy qarorni doim inson qabul qiladi.",
   "why.3.title": "Mas’uliyatli AI",
@@ -387,8 +438,9 @@ const uz: Dict = {
 
   "faq.eyebrow": "Savollar",
   "faq.title": "Muassasalar bizga eng ko‘p beradigan savollar.",
-  "faq.q1": "Mavjud kameralar bilan ishlay oladimi?",
-  "faq.a1": "Ha. NUR.AI muassasangizda o‘rnatilgan kameralar bilan integratsiyalash uchun mo‘ljallangan.",
+  "faq.q1": "NUR.AI mavjud kuzatuv tizimimiz bilan integratsiyalasha oladimi?",
+  "faq.a1":
+    "Ha. NUR.AI qo‘llab-quvvatlanadigan kuzatuv tizimlari bilan integratsiyalashish uchun mo‘ljallangan va mavjud kuzatuv jarayoningizni saqlab qoladi.",
   "faq.q2": "AI o‘qituvchilar yoki mutaxassislarni almashtiradimi?",
   "faq.a2": "Yo‘q. NUR.AI yordamchi. U ishni bajarayotgan mutaxassislarni qo‘llab-quvvatlaydi.",
   "faq.q3": "AI yakuniy qaror qabul qiladimi?",
@@ -548,6 +600,30 @@ const ru: Dict = {
   "serve.social.body": "Расширяет внимание преданных работников ухода.",
   "serve.ngo.title": "НКО",
   "serve.ngo.body": "Усиливает ограниченные ресурсы ответственной технологией.",
+  "serve.kinder.title": "Частные детские сады",
+  "serve.kinder.body": "Помогает воспитателям быть внимательными к каждому ребёнку в группе.",
+
+  // Hero trust line
+  "hero.trust": "Создано на основе реальных бесед со специалистами детских садов и реабилитационных центров.",
+
+  // Real user insights
+  "insights.eyebrow": "Исследование",
+  "insights.title": "Реальные инсайты пользователей",
+  "insights.1.title": "Проведено интервью",
+  "insights.1.body": "1 специалист частного детского сада.",
+  "insights.2.title": "Ранняя валидация",
+  "insights.2.body": "1 реабилитационный центр.",
+  "insights.3.title": "Ключевой инсайт",
+  "insights.3.body":
+    "Один воспитатель может одновременно присматривать примерно за пятнадцатью детьми, каждому из которых нужен разный уровень внимания и заботы.",
+  "insights.4.title": "Следующий шаг",
+  "insights.4.body":
+    "В этом месяце запланировано ещё 15 интервью с частными детскими садами, чтобы лучше понять реальные операционные задачи.",
+
+  // Contact
+  "contact.email": "Эл. почта",
+  "contact.linkedin": "LinkedIn",
+  "contact.linkedin_desc": "Официальная страница NUR.AI в LinkedIn",
 
   "caps.eyebrow": "Возможности ИИ",
   "caps.title": "Реалистичное, ответственное обнаружение.",
@@ -568,8 +644,9 @@ const ru: Dict = {
 
   "why.eyebrow": "Почему NUR.AI",
   "why.title": "Практические преимущества без преувеличений.",
-  "why.1.title": "Работает с имеющимися камерами",
-  "why.1.body": "Не требует замены оборудования.",
+  "why.1.title": "Интегрируется с существующими системами видеонаблюдения",
+  "why.1.body":
+    "NUR.AI интегрируется с поддерживаемыми системами видеонаблюдения и анализирует видеопотоки с помощью искусственного интеллекта.",
   "why.2.title": "Human-in-the-loop",
   "why.2.body": "Финальное решение всегда за человеком.",
   "why.3.title": "Ответственный ИИ",
@@ -604,8 +681,9 @@ const ru: Dict = {
 
   "faq.eyebrow": "Вопросы",
   "faq.title": "Что чаще всего спрашивают учреждения.",
-  "faq.q1": "Работает ли с существующими камерами?",
-  "faq.a1": "Да. NUR.AI создан для интеграции с камерами, которые уже установлены в учреждении.",
+  "faq.q1": "Может ли NUR.AI интегрироваться с нашей системой видеонаблюдения?",
+  "faq.a1":
+    "Да. NUR.AI создан для интеграции с поддерживаемыми системами видеонаблюдения и сохраняет ваш текущий процесс мониторинга.",
   "faq.q2": "ИИ заменяет учителей или специалистов?",
   "faq.a2": "Нет. NUR.AI — вспомогательный. Он поддерживает специалистов, которые уже делают работу.",
   "faq.q3": "Принимает ли ИИ окончательные решения?",
@@ -765,6 +843,30 @@ const kk: Dict = {
   "serve.social.body": "Berilgen qárawshılardıń itibarın keńeytedi.",
   "serve.ngo.title": "MEK",
   "serve.ngo.body": "Sheklengen resurslardı juwapkershilikli texnologiya menen kúsheytiriń.",
+  "serve.kinder.title": "Jeke balalar baqshaları",
+  "serve.kinder.body": "Tárbiyashılarǵa toparıdaǵı hár bir balaǵa itibarlı bolıwǵa járdem beredi.",
+
+  // Hero trust line
+  "hero.trust": "Balalar baqshası hám reabilitaciya qánigeleri menen bolǵan haqıyqıy sáwbetler tiykarında islengen.",
+
+  // Real user insights
+  "insights.eyebrow": "Izertlew",
+  "insights.title": "Haqıyqıy paydalanıwshı analizleri",
+  "insights.1.title": "Ótkerilgen intervyu",
+  "insights.1.body": "1 jeke balalar baqshası qánigesi.",
+  "insights.2.title": "Dáslepki tastıyıqlaw",
+  "insights.2.body": "1 reabilitaciya orayı.",
+  "insights.3.title": "Tiykarǵı juwmaq",
+  "insights.3.body":
+    "Bir tárbiyashı bir waqıtta shama menen on bes balanı baqlawı múmkin, hár biri hár qıylı dárejedegi itibar hám qamqorlıqtı talap etedi.",
+  "insights.4.title": "Keyingi qádem",
+  "insights.4.body":
+    "Bul ay haqıyqıy operaciyalıq mashqalalardı jaqsıraq túsiniw ushın taǵı 15 jeke balalar baqshası menen intervyu jobalastırılǵan.",
+
+  // Contact
+  "contact.email": "Elektron pochta",
+  "contact.linkedin": "LinkedIn",
+  "contact.linkedin_desc": "NUR.AI rásmiy LinkedIn beti",
 
   "caps.eyebrow": "AI múmkinshilikleri",
   "caps.title": "Realistik, juwapkershilikli anıqlaw.",
@@ -785,8 +887,9 @@ const kk: Dict = {
 
   "why.eyebrow": "Nege NUR.AI",
   "why.title": "Asırıp júbermey, ámeliy artıqmashılıqlar.",
-  "why.1.title": "Bar kameralar menen isleydi",
-  "why.1.body": "Jabdıqtı awıstırıw kerek emes.",
+  "why.1.title": "Bar baqlaw sistemaları menen integraciyalasadı",
+  "why.1.body":
+    "NUR.AI qollap-quwatlanatuǵın baqlaw sistemaları menen integraciyalasıp, video aǵımlardı jasalma intellekt penen analiz etedi.",
   "why.2.title": "Human-in-the-loop",
   "why.2.body": "Aqırǵı sheshim hámiyshe ádem tárepinen.",
   "why.3.title": "Juwapkershilikli AI",
@@ -821,8 +924,9 @@ const kk: Dict = {
 
   "faq.eyebrow": "Sorawlar",
   "faq.title": "Mákemeler bizge kóbirek beretuǵın sorawlar.",
-  "faq.q1": "Bar kameralar menen islewi múmkin be?",
-  "faq.a1": "Awa. NUR.AI mákemenizde ornatılǵan kameralar menen integraciyalasıw ushın jasalǵan.",
+  "faq.q1": "NUR.AI bar baqlaw sistemamız benen integraciyalasa ala ma?",
+  "faq.a1":
+    "Awa. NUR.AI qollap-quwatlanatuǵın baqlaw sistemaları menen integraciyalasıw ushın jasalǵan hám ámeldegi baqlaw processińizdi saqlaydı.",
   "faq.q2": "AI muǵallimlerdi yamasa qánigelerdi almastırama?",
   "faq.a2": "Yaq. NUR.AI járdemshi. Ol jumıs islep atırǵan qánigelerdi qollap-quwatlaydı.",
   "faq.q3": "AI aqırǵı sheshim qabıllaydı ma?",
