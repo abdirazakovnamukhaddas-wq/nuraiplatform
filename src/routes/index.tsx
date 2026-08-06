@@ -638,7 +638,50 @@ function FAQ() {
   );
 }
 
+/* ────────────────────────────  REAL USER INSIGHTS  ──────────────────────────── */
+
+function Insights() {
+  const { t } = useI18n();
+  const items = [
+    { icon: MessageSquare, k: "1" },
+    { icon: HeartPulse, k: "2" },
+    { icon: Lightbulb, k: "3" },
+    { icon: RouteIcon, k: "4" },
+  ];
+  return (
+    <section className="border-t border-border bg-surface py-20 sm:py-24">
+      <Container>
+        <SectionHeading eyebrow={t("insights.eyebrow")} title={t("insights.title")} />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((it, i) => (
+            <motion.div
+              key={it.k}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={fadeUp}
+              custom={i}
+              className="group rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-md"
+            >
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-surface-muted text-secondary transition-colors group-hover:bg-secondary group-hover:text-secondary-foreground">
+                <it.icon className="h-5 w-5" aria-hidden />
+              </span>
+              <h3 className="mt-4 text-base font-semibold text-foreground">
+                {t(`insights.${it.k}.title`)}
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                {t(`insights.${it.k}.body`)}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 /* ────────────────────────────  DEMO CTA  ──────────────────────────── */
+
 
 function DemoCTA({ onDemo }: { onDemo: () => void }) {
   const { t } = useI18n();
