@@ -1,423 +1,364 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, type Variants } from "motion/react";
-
+import { motion, useReducedMotion, useScroll, useTransform, type Variants } from "motion/react";
+import { useRef, useState } from "react";
 import {
-  Activity,
-  AlertTriangle,
-  ArrowRight,
-  Baby,
-  BellRing,
-  Bot,
-  Camera,
-  CheckCircle2,
-  ClipboardCheck,
-  Compass,
-  Eye,
-  GraduationCap,
-  HandHeart,
-  HeartHandshake,
-  HeartPulse,
-  Landmark,
-  Layers,
-  Lightbulb,
-  Linkedin,
-  Mail,
-  MessageSquare,
-  Lock,
-  MonitorSmartphone,
-  Rocket,
-  Route as RouteIcon,
-  ShieldCheck,
-  Sparkles,
-  UserCheck,
-  UserRound,
-  Users,
-  Waves,
-  XCircle,
-  Zap,
+  ArrowRight, BarChart3, Camera, Check, CheckCircle2, Cpu, Eye, Flag, Gauge, HeartHandshake,
+  Layers, LineChart, Mail, Linkedin, ScanEye, ShieldCheck, Sprout, Target, UserCheck, Users, Video, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Container } from "@/components/layout/Container";
-import { SectionHeading } from "@/components/layout/SectionHeading";
+import { smoothScrollTo } from "@/components/layout/Navbar";
 import { useDemo } from "@/lib/demo-context";
 import { useI18n } from "@/lib/i18n";
+import { BASE44, IS_DEV } from "@/lib/base44";
+import { cn } from "@/lib/utils";
+import heroImg from "@/assets/kindergarten_classroom_hero.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
+    meta: [
+      { title: "NUR.AI — AI Safety Intelligence for Kindergartens" },
+      { name: "description", content: "NUR.AI is building an intelligent safety assistant that helps kindergarten educators notice important moments and review potential risks. AI Assists. Humans Decide." },
+      { property: "og:title", content: "NUR.AI — Upgrading Kindergarten Safety with AI" },
+      { property: "og:description", content: "From passive cameras to proactive safety intelligence — with educators always in control." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
     links: [{ rel: "canonical", href: "/" }],
   }),
 });
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut", delay: i * 0.06 },
-  }),
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.08 } }),
 };
+const inView = { initial: "hidden", whileInView: "visible", viewport: { once: true, margin: "-80px" } } as const;
 
-/* ────────────────────────────  HERO  ──────────────────────────── */
+function Eyebrow({ children, light }: { children: React.ReactNode; light?: boolean }) {
+  return (
+    <p className={cn("inline-flex items-center gap-3 text-[11px] font-bold tracking-[0.22em] uppercase", light ? "text-gold" : "text-burgundy")}>
+      <span className="h-px w-8 bg-gold" aria-hidden />
+      {children}
+    </p>
+  );
+}
 
-function Hero({ onDemo }: { onDemo: () => void }) {
+function SectionNumber({ n, light }: { n: string; light?: boolean }) {
+  return (
+    <span aria-hidden className={cn("font-display text-[7rem] leading-none font-bold sm:text-[10rem]", light ? "text-gold" : "text-burgundy/10")}>
+      {n}
+    </span>
+  );
+}
+
+function Simulated() {
   const { t } = useI18n();
   return (
-    <section className="relative overflow-hidden">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,theme(colors.accent/25),transparent_60%)]"
-      />
-      {/* ambient pulses */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <motion.div
-          className="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-secondary/10 blur-3xl"
-          animate={{ y: [0, 20, 0], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute top-20 right-1/4 h-80 w-80 rounded-full bg-accent/15 blur-3xl"
-          animate={{ y: [0, -25, 0], opacity: [0.4, 0.7, 0.4] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        />
+    <span className="rounded-sm border border-gold/60 bg-burgundy-deep/80 px-1.5 py-0.5 text-[9px] font-bold tracking-[0.18em] text-gold uppercase">
+      {t("inv.event.simulated")}
+    </span>
+  );
+}
+
+/* Launches the Base44 MVP if configured; otherwise a safe fallback. */
+function LaunchLab({ className, size = "lg" }: { className?: string; size?: "lg" | "default" }) {
+  const { t } = useI18n();
+  const { openDemo } = useDemo();
+  if (BASE44.demo) {
+    return (
+      <div className={className}>
+        <Button asChild size={size} className="bg-gold text-burgundy-deep hover:bg-gold/90">
+          <a href={BASE44.demo} target="_blank" rel="noopener noreferrer">
+            {t("inv.lab.launch")} <ArrowRight className="h-4 w-4" />
+          </a>
+        </Button>
+        <p className="mt-2 text-xs text-ivory/70">{t("inv.lab.leaving")}</p>
       </div>
+    );
+  }
+  return (
+    <div className={className}>
+      <Button size={size} onClick={openDemo} className="bg-gold text-burgundy-deep hover:bg-gold/90">
+        {t("inv.lab.launch")} <ArrowRight className="h-4 w-4" />
+      </Button>
+      <p className="mt-2 text-xs text-ivory/70">{t("inv.lab.unavailable")}</p>
+      {IS_DEV && (
+        <p className="mt-2 rounded border border-dashed border-gold/60 px-2 py-1 font-mono text-[11px] text-gold">{t("inv.lab.dev")}</p>
+      )}
+    </div>
+  );
+}
 
-      <Container className="pt-16 pb-20 sm:pt-24 sm:pb-28">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr]">
-          <div>
-            <motion.span
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium tracking-wide text-muted-foreground uppercase"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-secondary" aria-hidden />
-              {t("hero.eyebrow")}
-            </motion.span>
+function usePilot() {
+  const { openDemo } = useDemo();
+  return () => (BASE44.pilot ? window.open(BASE44.pilot, "_blank", "noopener,noreferrer") : openDemo());
+}
 
-            <motion.h1
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={1}
-              className="mt-5 text-4xl leading-[1.1] font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
-            >
-              {t("hero.title")}
-            </motion.h1>
+/* ─────────────── HERO ─────────────── */
+function Hero() {
+  const { t } = useI18n();
+  const pilot = usePilot();
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 60]);
 
-            <motion.p
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={2}
-              className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
-            >
-              {t("hero.subtitle")}
-            </motion.p>
+  return (
+    <section ref={ref} className="relative overflow-hidden bg-ivory">
+      <div className="mx-auto grid max-w-[1440px] lg:min-h-[calc(100dvh-4rem)] lg:grid-cols-[1.05fr_1fr]">
+        <div className="flex flex-col justify-center px-5 py-14 sm:px-10 lg:py-20 lg:pr-12 lg:pl-16">
+          <motion.div variants={reveal} initial="hidden" animate="visible" custom={0}>
+            <Eyebrow>{t("inv.hero.eyebrow")}</Eyebrow>
+          </motion.div>
+          <motion.h1 variants={reveal} initial="hidden" animate="visible" custom={1}
+            className="mt-6 text-[2.5rem] leading-[1.02] font-bold tracking-tight text-charcoal uppercase sm:text-6xl xl:text-[4.75rem]">
+            {t("inv.hero.h1a")} <span className="text-burgundy">{t("inv.hero.h1b")}</span>{" "}
+            <span className="relative inline-block italic text-gold [text-shadow:0_1px_0_var(--burgundy)]">{t("inv.hero.h1c")}</span>
+          </motion.h1>
+          <motion.p variants={reveal} initial="hidden" animate="visible" custom={2} className="mt-6 font-display text-xl text-burgundy italic sm:text-2xl">
+            {t("inv.hero.sub")}
+          </motion.p>
+          <motion.p variants={reveal} initial="hidden" animate="visible" custom={3} className="mt-4 max-w-xl text-base leading-relaxed text-charcoal/75">
+            {t("inv.hero.desc")}
+          </motion.p>
+          <motion.div variants={reveal} initial="hidden" animate="visible" custom={4} className="mt-8 flex flex-wrap gap-3">
+            <Button size="lg" onClick={() => smoothScrollTo("#vision-lab")}>
+              {t("inv.hero.cta1")} <ArrowRight className="h-4 w-4" />
+            </Button>
+            <Button size="lg" variant="outline" className="border-olive-deep text-olive-deep hover:bg-olive-deep hover:text-warm-white" onClick={pilot}>
+              {t("inv.hero.cta2")}
+            </Button>
+          </motion.div>
+          <motion.p variants={reveal} initial="hidden" animate="visible" custom={5} className="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-olive-deep">
+            <HeartHandshake className="h-4 w-4" aria-hidden /> {t("inv.hero.tagline")}
+          </motion.p>
+        </div>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={3}
-              className="mt-8 flex flex-wrap items-center gap-3"
-            >
-              <Button size="lg" onClick={onDemo}>
-                {t("cta.request_demo")}
-                <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() =>
-                  document.querySelector("#how")?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                {t("cta.see_how")}
-              </Button>
-            </motion.div>
+        {/* RIGHT — camera visualisation */}
+        <div className="relative min-h-[460px] overflow-hidden bg-burgundy-deep sm:min-h-[560px]">
+          <motion.img style={{ y }} src={heroImg} width={1280} height={1536} alt={t("inv.hero.concept")}
+            initial={{ scale: 1.08, filter: "blur(6px)" }} animate={{ scale: 1, filter: "blur(0px)" }} transition={{ duration: 1.6, ease: "easeOut" }}
+            className="absolute inset-0 h-[110%] w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-burgundy-deep/85 via-transparent to-burgundy-deep/30" aria-hidden />
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={4}
-              className="mt-8 inline-flex items-center gap-2 text-sm text-muted-foreground"
-            >
-              <ShieldCheck className="h-4 w-4 text-success" aria-hidden />
-              {t("hero.badge_hitl")}
-            </motion.div>
-
-            <motion.p
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={5}
-              className="mt-3 max-w-xl text-xs leading-relaxed text-muted-foreground"
-            >
-              {t("hero.trust")}
-            </motion.p>
-
+          {/* viewfinder corners */}
+          <div aria-hidden className="pointer-events-none absolute inset-5 sm:inset-8">
+            {["top-0 left-0 border-t-2 border-l-2", "top-0 right-0 border-t-2 border-r-2", "bottom-0 left-0 border-b-2 border-l-2", "bottom-0 right-0 border-b-2 border-r-2"].map((c) => (
+              <span key={c} className={cn("absolute h-7 w-7 border-gold/80", c)} />
+            ))}
+          </div>
+          <div className="absolute top-8 left-8 flex items-center gap-2 sm:top-11 sm:left-11">
+            <span className="rounded-sm bg-burgundy-deep/80 px-2 py-1 font-mono text-[10px] tracking-wider text-ivory">{t("inv.hero.cam")}</span>
+            <Simulated />
           </div>
 
-          <HeroVisual />
+          {/* bounding boxes */}
+          <motion.div aria-hidden className="absolute top-[42%] left-[22%] h-[30%] w-[50%] rounded-sm border border-gold/80"
+            animate={reduce ? undefined : { opacity: [0.5, 1, 0.5] }} transition={{ duration: 3, repeat: Infinity }}>
+            <span className="absolute -top-5 left-0 bg-gold px-1.5 text-[10px] font-bold text-burgundy-deep">{t("inv.hero.box1")}</span>
+          </motion.div>
+          <motion.div aria-hidden className="absolute top-[20%] left-[38%] h-[26%] w-[28%] rounded-sm border border-dashed border-ivory/70"
+            animate={reduce ? undefined : { scale: [1, 1.03, 1] }} transition={{ duration: 4, repeat: Infinity }}>
+            <span className="absolute -top-5 left-0 bg-ivory/90 px-1.5 text-[10px] font-bold text-burgundy-deep">{t("inv.hero.box2")}</span>
+          </motion.div>
+
+          {/* floating event card */}
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 0.8 }}
+            className="absolute right-5 bottom-14 left-5 rounded-lg border border-gold/40 bg-burgundy-deep/90 p-4 text-ivory shadow-xl backdrop-blur sm:right-10 sm:left-auto sm:w-80">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-semibold tracking-[0.2em] text-gold uppercase">{t("inv.event.sample")}</span>
+              <Simulated />
+            </div>
+            <p className="mt-2 font-display text-2xl font-semibold">{t("inv.event.title")}</p>
+            <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-ivory/80"><UserCheck className="h-3.5 w-3.5 text-gold" /> {t("inv.event.review")}</p>
+            <div className="mt-3 grid grid-cols-2 gap-2" aria-hidden>
+              <span className="rounded bg-gold py-1.5 text-center text-xs font-bold text-burgundy-deep">{t("inv.event.confirm")}</span>
+              <span className="rounded border border-ivory/30 py-1.5 text-center text-xs font-semibold">{t("inv.event.dismiss")}</span>
+            </div>
+          </motion.div>
+          <p className="absolute bottom-4 left-5 text-[10px] tracking-wide text-ivory/70 sm:left-10">{t("inv.hero.concept")}</p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────── 01 INVISIBLE SHIELD ─────────────── */
+function Shield() {
+  const { t } = useI18n();
+  return (
+    <section id="problem" className="scroll-mt-16 bg-burgundy-deep py-24 text-ivory">
+      <Container className="max-w-7xl">
+        <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:items-end">
+          <motion.div variants={reveal} {...inView}><SectionNumber n="01" light /></motion.div>
+          <motion.div variants={reveal} {...inView} custom={1} className="pb-4">
+            <h2 className="text-4xl font-bold sm:text-6xl">{t("inv.shield.title")}</h2>
+            <p className="mt-4 max-w-xl font-display text-xl text-ivory/80 italic">{t("inv.shield.copy")}</p>
+          </motion.div>
+        </div>
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
+          <motion.div variants={reveal} {...inView} className="rounded-xl border border-ivory/10 bg-ivory/[0.03] p-8">
+            <p className="text-xs font-bold tracking-[0.2em] text-ivory/50 uppercase">{t("inv.shield.a.label")}</p>
+            <p className="mt-2 font-display text-3xl text-ivory/70">{t("inv.shield.a.result")}</p>
+            <ul className="mt-6 space-y-3 text-sm text-ivory/60">
+              {[1, 2, 3].map((n) => <li key={n} className="flex gap-3"><X className="mt-0.5 h-4 w-4 shrink-0" />{t(`inv.shield.a.${n}`)}</li>)}
+            </ul>
+          </motion.div>
+          <motion.div variants={reveal} {...inView} custom={1} className="rounded-xl border border-gold/40 bg-burgundy p-8 shadow-xl">
+            <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">{t("inv.shield.b.label")}</p>
+            <p className="mt-2 font-display text-3xl">{t("inv.shield.b.result")}</p>
+            <ul className="mt-6 space-y-3 text-sm text-ivory/90">
+              {[1, 2, 3].map((n) => <li key={n} className="flex gap-3"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />{t(`inv.shield.b.${n}`)}</li>)}
+            </ul>
+          </motion.div>
+        </div>
+        <p className="mt-8 text-sm text-ivory/60">{t("inv.shield.note")}</p>
       </Container>
     </section>
   );
 }
 
-function HeroVisual() {
+/* ─────────────── 02 HOW IT WORKS ─────────────── */
+function How() {
   const { t } = useI18n();
-  const rows = [
-    { icon: Activity, label: t("hero.row.attention") },
-    { icon: Users, label: t("hero.row.group") },
-    { icon: UserRound, label: t("hero.row.individual") },
-  ];
+  const [active, setActive] = useState(0);
+  const steps = [Camera, ScanEye, Flag, UserCheck];
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-      className="relative"
-    >
-      <div className="rounded-3xl border border-border bg-card p-5 shadow-lg">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-            <span className="inline-flex h-2 w-2 rounded-full bg-success" aria-hidden />
-            {t("hero.card.signal")}
+    <section id="solution" className="scroll-mt-16 bg-warm-white py-24">
+      <Container className="max-w-7xl">
+        <div className="flex flex-wrap items-end gap-8">
+          <SectionNumber n="02" />
+          <div className="pb-4">
+            <h2 className="text-4xl font-bold text-charcoal sm:text-5xl">{t("inv.how.title")}</h2>
+            <p className="mt-3 max-w-xl text-charcoal/70">{t("inv.how.sub")}</p>
           </div>
-          <span className="rounded-full bg-surface-muted px-2 py-0.5 text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-            {t("hero.card.review")}
-          </span>
         </div>
-
-        <div className="mt-4 space-y-3">
-          {rows.map((row, i) => (
-            <motion.div
-              key={row.label}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 + i * 0.15, duration: 0.4 }}
-              className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
-            >
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-background">
-                <row.icon className="h-4 w-4 text-secondary" aria-hidden />
+        <div className="relative mt-14 grid gap-4 md:grid-cols-4">
+          <div aria-hidden className="absolute top-10 right-[12%] left-[12%] hidden h-px bg-border md:block">
+            <motion.div className="h-px bg-gold" animate={{ width: `${(active / 3) * 100}%` }} transition={{ duration: 0.5 }} />
+          </div>
+          {steps.map((Icon, i) => (
+            <button key={i} type="button" onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)}
+              aria-pressed={active === i}
+              className={cn("relative rounded-xl border p-6 text-left transition-all duration-300", active >= i ? "border-burgundy/30 bg-ivory shadow-md" : "border-border bg-card")}>
+              <span className={cn("relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-full border-2 transition-colors", active >= i ? "border-gold bg-burgundy text-gold" : "border-border bg-card text-charcoal/50")}>
+                <Icon className="h-5 w-5" />
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-foreground">{row.label}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t("hero.card.suggestion")}
-                </p>
-              </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" aria-hidden />
-            </motion.div>
+              <p className="mt-5 font-mono text-xs text-burgundy">0{i + 1}</p>
+              <p className="mt-1 font-display text-xl font-semibold text-charcoal">{t(`inv.how.${i + 1}.t`)}</p>
+              <p className="mt-2 text-sm text-charcoal/70">{t(`inv.how.${i + 1}.d`)}</p>
+            </button>
           ))}
         </div>
-
-        <div className="mt-4 flex items-center justify-between rounded-xl bg-primary p-3 text-primary-foreground">
-          <div className="flex items-center gap-2 text-sm">
-            <ShieldCheck className="h-4 w-4 text-accent" aria-hidden />
-            <span className="font-medium">{t("hero.badge_hitl")}</span>
-          </div>
-          <span className="text-xs opacity-80">{t("hero.card.tag")}</span>
-        </div>
-      </div>
-
-      <div
-        aria-hidden
-        className="absolute -inset-6 -z-10 rounded-[2rem] bg-[radial-gradient(circle_at_30%_20%,theme(colors.secondary/15),transparent_60%)]"
-      />
-    </motion.div>
+        <p className="mt-8 rounded-lg border border-olive/30 bg-olive/10 px-4 py-3 text-sm text-olive-deep">{t("inv.how.status")}</p>
+      </Container>
+    </section>
   );
 }
 
-
-/* ────────────────────────────  PROBLEM  ──────────────────────────── */
-
-function Problem() {
+/* ─────────────── 03 VISION LAB ─────────────── */
+function VisionLab() {
   const { t } = useI18n();
-  const a = [t("problem.a.1"), t("problem.a.2"), t("problem.a.3"), t("problem.a.4")];
-  const b = [t("problem.b.1"), t("problem.b.2"), t("problem.b.3"), t("problem.b.4")];
+  const [status, setStatus] = useState<"pending" | "confirmed" | "dismissed">("pending");
+  const events = [
+    { time: "09:42", label: t("inv.lab.ev1"), tone: "bg-olive" },
+    { time: "10:15", label: t("inv.lab.ev2"), tone: "bg-gold" },
+    { time: "11:03", label: t("inv.lab.ev3"), tone: "bg-ivory/40" },
+  ];
   return (
-    <section id="problem" className="py-20 sm:py-24">
-      <Container>
-        <SectionHeading
-          eyebrow={t("problem.eyebrow")}
-          title={t("problem.title")}
-          subtitle={t("problem.subtitle")}
-        />
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={fadeUp}
-          >
-            <Card className="h-full border-border bg-card">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                  <XCircle className="h-4 w-4" aria-hidden />
-                  {t("problem.a.title")}
+    <section id="vision-lab" className="scroll-mt-16 bg-burgundy py-24 text-ivory">
+      <Container className="max-w-7xl">
+        <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <Eyebrow light>{t("inv.lab.eyebrow")}</Eyebrow>
+            <h2 className="mt-5 text-5xl font-bold uppercase sm:text-7xl">{t("inv.lab.title")}</h2>
+            <p className="mt-4 max-w-xl text-lg text-ivory/80">{t("inv.lab.desc")}</p>
+          </div>
+          <LaunchLab />
+        </div>
+
+        <motion.div variants={reveal} {...inView} className="mt-14 overflow-hidden rounded-2xl border border-gold/30 bg-burgundy-deep shadow-2xl">
+          <div className="flex items-center justify-between border-b border-ivory/10 px-5 py-3">
+            <span className="inline-flex items-center gap-2 text-xs font-semibold"><Eye className="h-4 w-4 text-gold" /> NUR.AI Vision Lab</span>
+            <Simulated />
+          </div>
+          <div className="grid lg:grid-cols-[1.6fr_1fr]">
+            <div className="relative aspect-video overflow-hidden">
+              <img src={heroImg} alt={t("inv.lab.preview")} loading="lazy" width={1280} height={1536} className="h-full w-full object-cover opacity-70 grayscale-[30%]" />
+              <div className="absolute top-[45%] left-[24%] h-[32%] w-[46%] border-2 border-gold" aria-hidden />
+              <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded bg-burgundy-deep/85 px-2 py-1 text-[11px]"><Video className="h-3.5 w-3.5 text-gold" />{t("inv.lab.preview")}</span>
+            </div>
+            <div className="space-y-5 p-6">
+              <dl className="grid grid-cols-1 gap-3 text-sm">
+                {[["inv.lab.type", "inv.lab.type.v"], ["inv.lab.source", "inv.lab.source.v"]].map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-4 border-b border-ivory/10 pb-2"><dt className="text-ivory/60">{t(k)}</dt><dd className="font-semibold">{t(v)}</dd></div>
+                ))}
+                <div className="flex justify-between gap-4 border-b border-ivory/10 pb-2">
+                  <dt className="text-ivory/60">{t("inv.lab.status")}</dt>
+                  <dd className="font-semibold text-gold" aria-live="polite">
+                    {status === "pending" ? t("inv.lab.status.v") : status === "confirmed" ? t("inv.event.confirm") : t("inv.event.dismiss")}
+                  </dd>
                 </div>
-                <ul className="mt-4 space-y-3">
-                  {a.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-foreground/90">
-                      <span className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-                      {item}
-                    </li>
+              </dl>
+              <div className="grid grid-cols-2 gap-2">
+                <Button onClick={() => setStatus("confirmed")} className="bg-gold text-burgundy-deep hover:bg-gold/90"><CheckCircle2 className="h-4 w-4" />{t("inv.event.confirm")}</Button>
+                <Button variant="outline" onClick={() => setStatus("dismissed")} className="border-ivory/30 bg-transparent text-ivory hover:bg-ivory/10 hover:text-ivory"><X className="h-4 w-4" />{t("inv.event.dismiss")}</Button>
+              </div>
+              <div>
+                <p className="text-xs font-bold tracking-[0.2em] text-ivory/60 uppercase">{t("inv.lab.timeline")}</p>
+                <ol className="mt-3 space-y-2">
+                  {events.map((e) => (
+                    <li key={e.time} className="flex items-center gap-3 text-sm"><span className={cn("h-2 w-2 rounded-full", e.tone)} /><span className="font-mono text-xs text-ivory/60">{e.time}</span>{e.label}</li>
                   ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={fadeUp}
-            custom={1}
-          >
-            <Card className="h-full border-secondary/30 bg-card shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 text-sm font-semibold text-secondary">
-                  <CheckCircle2 className="h-4 w-4" aria-hidden />
-                  {t("problem.b.title")}
-                </div>
-                <ul className="mt-4 space-y-3">
-                  {b.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-foreground">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-secondary" aria-hidden />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-ivory/60">
+          <span>{t("inv.lab.illustrative")}</span>
+          {BASE44.app && <a href={BASE44.app} target="_blank" rel="noopener noreferrer" className="font-semibold text-gold underline-offset-4 hover:underline">{t("inv.lab.dashboard")} →</a>}
         </div>
       </Container>
     </section>
   );
 }
 
-/* ────────────────────────────  SOLUTION  ──────────────────────────── */
-
-function Solution() {
+/* ─────────────── 04 TECHNOLOGY ─────────────── */
+function Technology() {
   const { t } = useI18n();
+  const flow = [Video, Cpu, Layers, Gauge, UserCheck];
+  const status = [
+    { k: "s1", tone: "bg-olive-deep text-warm-white", done: true },
+    { k: "s2", tone: "bg-gold text-burgundy-deep", done: false },
+    { k: "s3", tone: "border border-burgundy text-burgundy", done: false },
+  ];
   return (
-    <section id="solutions" className="border-y border-border bg-surface py-20 sm:py-24">
-      <Container>
-        <div className="grid items-center gap-10 md:grid-cols-[1fr_1.05fr]">
+    <section id="technology" className="scroll-mt-16 bg-ivory py-24">
+      <Container className="max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
-            <SectionHeading
-              eyebrow={t("solution.eyebrow")}
-              title={t("solution.title")}
-              subtitle={t("solution.subtitle")}
-            />
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
-              <ShieldCheck className="h-4 w-4 text-accent" aria-hidden />
-              {t("solution.tag")}
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="rounded-3xl border border-border bg-background p-5 shadow-sm"
-          >
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { icon: Camera, label: t("solution.node.camera") },
-                { icon: Bot, label: t("solution.node.ai") },
-                { icon: BellRing, label: t("solution.node.alert") },
-                { icon: UserCheck, label: t("solution.node.human") },
-              ].map((n) => (
-                <div
-                  key={n.label}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
-                >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-background text-secondary">
-                    <n.icon className="h-4 w-4" aria-hidden />
-                  </span>
-                  <span className="text-sm font-medium text-foreground">{n.label}</span>
+            <SectionNumber n="04" />
+            <h2 className="-mt-6 text-4xl font-bold text-charcoal uppercase sm:text-5xl">{t("inv.tech.title")}</h2>
+            <p className="mt-4 text-charcoal/70">{t("inv.tech.sub")}</p>
+            <div className="mt-8 space-y-3">
+              {status.map((s) => (
+                <div key={s.k} className="flex items-start gap-4 rounded-lg bg-warm-white p-4 shadow-sm">
+                  <span className={cn("shrink-0 rounded-full px-3 py-1 text-[11px] font-bold tracking-wide uppercase", s.tone)}>{t(`inv.tech.${s.k}`)}</span>
+                  <p className="text-sm text-charcoal/75">{t(`inv.tech.${s.k}d`)}</p>
                 </div>
               ))}
             </div>
-
-          </motion.div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-/* ────────────────────────────  HOW IT WORKS  ──────────────────────────── */
-
-function HowItWorks() {
-  const { t } = useI18n();
-  const steps = [
-    { icon: Camera, key: "s1" },
-    { icon: Bot, key: "s2" },
-    { icon: AlertTriangle, key: "s3" },
-    { icon: BellRing, key: "s4" },
-    { icon: ClipboardCheck, key: "s5" },
-    { icon: UserCheck, key: "s6" },
-  ] as const;
-  return (
-    <section id="how" className="py-20 sm:py-24">
-      <Container>
-        <SectionHeading
-          eyebrow={t("how.eyebrow")}
-          title={t("how.title")}
-          subtitle={t("how.subtitle")}
-        />
-        <div className="relative mt-12">
-          <div
-            aria-hidden
-            className="absolute top-6 left-6 hidden h-[calc(100%-3rem)] w-px bg-border md:block"
-          />
-          <ol className="space-y-4 md:space-y-6">
-            {steps.map((s, i) => (
-              <motion.li
-                key={s.key}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: i * 0.08, duration: 0.5, ease: "easeOut" }}
-                className="relative flex gap-4 md:gap-6"
-              >
-                <div className="relative">
-                  <span className="relative z-10 flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card text-secondary shadow-sm">
-                    <s.icon className="h-5 w-5" aria-hidden />
-                  </span>
-                </div>
-                <Card className="flex-1 border-border">
-                  <CardContent className="flex items-center justify-between gap-4 p-5">
-                    <div>
-                      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                        {t("how.step")} {i + 1}
-                      </p>
-
-                      <h3 className="mt-1 text-base font-semibold text-foreground">
-                        {t(`how.${s.key}.title`)}
-                      </h3>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`how.${s.key}.body`)}
-                      </p>
-                    </div>
-                    <ArrowRight className="hidden h-4 w-4 shrink-0 text-muted-foreground sm:inline" />
-                  </CardContent>
-                </Card>
+            <p className="mt-6 text-xs text-charcoal/60">{t("inv.tech.honest")}</p>
+          </div>
+          <ol className="relative space-y-3">
+            {flow.map((Icon, i) => (
+              <motion.li key={i} variants={reveal} {...inView} custom={i}
+                className={cn("flex items-center gap-5 rounded-xl p-5", i === 4 ? "bg-olive-deep text-warm-white" : "bg-burgundy text-ivory")}>
+                <span className="font-display text-3xl text-gold">0{i + 1}</span>
+                <Icon className="h-5 w-5 text-gold" aria-hidden />
+                <span className="font-semibold">{t(`inv.tech.${i + 1}`)}</span>
               </motion.li>
             ))}
           </ol>
@@ -427,357 +368,164 @@ function HowItWorks() {
   );
 }
 
-/* ────────────────────────────  WHO WE SERVE  ──────────────────────────── */
-
-function WhoWeServe() {
+/* ─────────────── 05 BUSINESS ─────────────── */
+function Business() {
   const { t } = useI18n();
-  const items = [
-    { icon: Baby, key: "kinder" },
-    { icon: GraduationCap, key: "schools" },
-    { icon: Activity, key: "health" },
-    { icon: Landmark, key: "gov" },
-    { icon: HeartPulse, key: "rehab" },
-    { icon: HandHeart, key: "social" },
-    { icon: Users, key: "ngo" },
-
-  ] as const;
+  const cards = [Target, ShieldCheck, LineChart, Sprout];
+  const road = ["r1", "r2", "r3", "r4"];
   return (
-    <section id="institutions" className="border-t border-border bg-surface py-20 sm:py-24">
-      <Container>
-        <SectionHeading eyebrow={t("serve.eyebrow")} title={t("serve.title")} />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((a, i) => (
-            <motion.div
-              key={a.key}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={fadeUp}
-              custom={i}
-              className="group rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-md"
-            >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-surface-muted text-secondary transition-colors group-hover:bg-secondary group-hover:text-secondary-foreground">
-                <a.icon className="h-5 w-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">
-                {t(`serve.${a.key}.title`)}
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t(`serve.${a.key}.body`)}</p>
+    <section id="business" className="scroll-mt-16 bg-warm-white py-24">
+      <Container className="max-w-7xl">
+        <Eyebrow>{t("inv.biz.eyebrow")}</Eyebrow>
+        <h2 className="mt-5 max-w-3xl text-4xl font-bold text-charcoal uppercase sm:text-5xl">{t("inv.biz.title")}</h2>
+        <p className="mt-3 text-charcoal/70">{t("inv.biz.sub")}</p>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {cards.map((Icon, i) => (
+            <motion.div key={i} variants={reveal} {...inView} custom={i}
+              className="group rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-gold hover:shadow-lg">
+              <Icon className="h-6 w-6 text-burgundy transition-transform group-hover:scale-110" />
+              <p className="mt-5 font-display text-xl font-semibold text-charcoal">{t(`inv.biz.c${i + 1}.t`)}</p>
+              <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{t(`inv.biz.c${i + 1}.d`)}</p>
             </motion.div>
           ))}
+        </div>
+        <div className="mt-14 rounded-2xl bg-olive-deep p-8 text-warm-white">
+          <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">{t("inv.biz.road")}</p>
+          <ol className="mt-6 grid gap-4 sm:grid-cols-4">
+            {road.map((r, i) => (
+              <li key={r} className={cn("rounded-lg p-4", i === 0 ? "bg-gold text-burgundy-deep" : "border border-dashed border-warm-white/30")}>
+                <p className="text-[10px] font-bold tracking-widest uppercase opacity-80">{i === 0 ? t("inv.biz.now") : t("inv.biz.future")}</p>
+                <p className="mt-1 font-display text-lg font-semibold">{t(`inv.biz.${r}`)}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </Container>
     </section>
   );
 }
 
-/* ────────────────────────────  AI CAPABILITIES  ──────────────────────────── */
-
-function Capabilities() {
+/* ─────────────── 06 IMPACT ─────────────── */
+function Impact() {
   const { t } = useI18n();
-  const items = [
-    { icon: Waves, key: "fall" },
-    { icon: Lock, key: "area" },
-    { icon: Compass, key: "wander" },
-    { icon: AlertTriangle, key: "emergency" },
-    { icon: Eye, key: "behaviour" },
-    { icon: Activity, key: "activity" },
-  ] as const;
+  const icons = [HeartHandshake, Eye, BarChart3, CheckCircle2];
   return (
-    <section className="py-20 sm:py-24">
-      <Container>
-        <SectionHeading
-          eyebrow={t("caps.eyebrow")}
-          title={t("caps.title")}
-          subtitle={t("caps.subtitle")}
-        />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((c, i) => (
-            <motion.div
-              key={c.key}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={fadeUp}
-              custom={i}
-            >
-              <Card className="h-full border-border transition-shadow hover:shadow-md">
-                <CardContent className="p-6">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-surface text-secondary">
-                    <c.icon className="h-5 w-5" aria-hidden />
-                  </span>
-                  <h3 className="mt-4 text-base font-semibold text-foreground">
-                    {t(`caps.${c.key}.title`)}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {t(`caps.${c.key}.body`)}
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-/* ────────────────────────────  WHY NUR.AI  ──────────────────────────── */
-
-function Why() {
-  const { t } = useI18n();
-  const items = [
-    { icon: Camera, k: "1" },
-    { icon: UserCheck, k: "2" },
-    { icon: ShieldCheck, k: "3" },
-    { icon: Zap, k: "4" },
-    { icon: Rocket, k: "5" },
-    { icon: Lock, k: "6" },
-    { icon: Layers, k: "7" },
-    { icon: MonitorSmartphone, k: "8" },
-  ];
-  return (
-    <section className="border-t border-border bg-surface py-20 sm:py-24">
-      <Container>
-        <SectionHeading eyebrow={t("why.eyebrow")} title={t("why.title")} />
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((it, i) => (
-            <motion.div
-              key={it.k}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={fadeUp}
-              custom={i}
-              className="rounded-2xl border border-border bg-background p-5"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-surface-muted text-secondary">
-                <it.icon className="h-5 w-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 text-sm font-semibold text-foreground">
-                {t(`why.${it.k}.title`)}
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t(`why.${it.k}.body`)}</p>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-/* ────────────────────────────  SECURITY  ──────────────────────────── */
-
-function Security() {
-  const { t } = useI18n();
-  const items = [
-    { icon: Layers, k: "1" },
-    { icon: Lock, k: "2" },
-    { icon: UserCheck, k: "3" },
-    { icon: HeartHandshake, k: "4" },
-    { icon: ShieldCheck, k: "5" },
-    { icon: Eye, k: "6" },
-  ];
-  return (
-    <section id="security" className="py-20 sm:py-24">
-      <Container>
-        <SectionHeading
-          eyebrow={t("sec.eyebrow")}
-          title={t("sec.title")}
-          subtitle={t("sec.subtitle")}
-        />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((it, i) => (
-            <motion.div
-              key={it.k}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={fadeUp}
-              custom={i}
-              className="rounded-2xl border border-border bg-card p-6"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
-                <it.icon className="h-5 w-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">
-                {t(`sec.${it.k}.title`)}
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t(`sec.${it.k}.body`)}</p>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-/* ────────────────────────────  FAQ  ──────────────────────────── */
-
-function FAQ() {
-  const { t } = useI18n();
-  const qs = [1, 2, 3, 4, 5] as const;
-  return (
-    <section id="faq" className="border-t border-border bg-surface py-20 sm:py-24">
-      <Container className="max-w-3xl">
-        <SectionHeading eyebrow={t("faq.eyebrow")} title={t("faq.title")} />
-        <Accordion type="single" collapsible className="mt-8 w-full">
-          {qs.map((n) => (
-            <AccordionItem key={n} value={`q${n}`}>
-              <AccordionTrigger className="text-left text-base font-medium">
-                {t(`faq.q${n}`)}
-              </AccordionTrigger>
-              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                {t(`faq.a${n}`)}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </Container>
-    </section>
-  );
-}
-
-/* ────────────────────────────  REAL USER INSIGHTS  ──────────────────────────── */
-
-function Insights() {
-  const { t } = useI18n();
-  const items = [
-    { icon: MessageSquare, k: "1" },
-    { icon: HeartPulse, k: "2" },
-    { icon: Lightbulb, k: "3" },
-    { icon: RouteIcon, k: "4" },
-  ];
-  return (
-    <section className="border-t border-border bg-surface py-20 sm:py-24">
-      <Container>
-        <SectionHeading eyebrow={t("insights.eyebrow")} title={t("insights.title")} />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((it, i) => (
-            <motion.div
-              key={it.k}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={fadeUp}
-              custom={i}
-              className="group rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-md"
-            >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-surface-muted text-secondary transition-colors group-hover:bg-secondary group-hover:text-secondary-foreground">
-                <it.icon className="h-5 w-5" aria-hidden />
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">
-                {t(`insights.${it.k}.title`)}
-              </h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                {t(`insights.${it.k}.body`)}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-/* ────────────────────────────  DEMO CTA  ──────────────────────────── */
-
-
-function DemoCTA({ onDemo }: { onDemo: () => void }) {
-  const { t } = useI18n();
-  return (
-    <section id="contact" className="py-20 sm:py-24">
-      <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-3xl border border-border bg-primary p-10 text-primary-foreground sm:p-14"
-        >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,theme(colors.accent/25),transparent_50%)]"
-          />
-          <div className="relative grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1 text-xs font-medium tracking-wide uppercase">
-                {t("demo.eyebrow")}
-              </span>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
-                {t("demo.title")}
-              </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/80 sm:text-base">
-                {t("demo.subtitle")}
-              </p>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <a
-                  href={`mailto:${t("contact.email_value")}`}
-                  className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
-                >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
-                    <Mail className="h-4 w-4" aria-hidden />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
-                      {t("contact.email")}
-                    </span>
-                    <span className="block break-all text-sm font-medium">
-                      {t("contact.email_value")}
-                    </span>
-                  </span>
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/nur-ai-platform"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group flex items-center gap-3 rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-foreground/15"
-                >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-foreground/10 text-accent">
-                    <Linkedin className="h-4 w-4" aria-hidden />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-xs font-medium tracking-wide text-primary-foreground/70 uppercase">
-                      {t("contact.linkedin")}
-                    </span>
-                    <span className="block truncate text-sm font-medium">
-                      {t("contact.linkedin_desc")}
-                    </span>
-                  </span>
-                </a>
-              </div>
+    <section id="impact" className="scroll-mt-16 bg-burgundy-deep py-24 text-ivory">
+      <Container className="max-w-7xl">
+        <Eyebrow light>{t("inv.impact.eyebrow")}</Eyebrow>
+        <h2 className="mt-5 max-w-3xl text-4xl font-bold uppercase sm:text-5xl">{t("inv.impact.title")}</h2>
+        <p className="mt-3 text-ivory/70">{t("inv.impact.sub")}</p>
+        <div className="mt-12 grid gap-px overflow-hidden rounded-xl bg-ivory/10 sm:grid-cols-2 lg:grid-cols-4">
+          {icons.map((Icon, i) => (
+            <div key={i} className="bg-burgundy-deep p-7 transition-colors hover:bg-burgundy">
+              <Icon className="h-6 w-6 text-gold" />
+              <p className="mt-5 font-display text-xl font-semibold">{t(`inv.impact.${i + 1}.t`)}</p>
+              <p className="mt-2 text-sm text-ivory/70">{t(`inv.impact.${i + 1}.d`)}</p>
             </div>
-            <div className="flex md:justify-end">
-              <Button size="lg" variant="secondary" onClick={onDemo}>
-                {t("cta.request_demo")}
-                <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
-              </Button>
+          ))}
+        </div>
+        <ul className="mt-10 grid gap-3 md:grid-cols-2">
+          {["m1", "m2"].map((m) => (
+            <li key={m} className="flex items-start gap-3 rounded-lg border border-gold/30 p-4 text-sm">
+              <span className="shrink-0 rounded bg-olive px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase">{t("inv.impact.milestone")}</span>
+              {t(`inv.impact.${m}`)}
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  );
+}
+
+/* ─────────────── 07 TEAM ─────────────── */
+/* Edit this list once team information is verified. */
+const TEAM: { name?: string; roleKey: string; bio?: string }[] = [
+  { roleKey: "inv.team.founder" },
+  { roleKey: "inv.team.member" },
+  { roleKey: "inv.team.member" },
+];
+
+function Team() {
+  const { t } = useI18n();
+  return (
+    <section id="team" className="scroll-mt-16 bg-ivory py-24">
+      <Container className="grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.2fr]">
+        <div>
+          <Eyebrow>{t("inv.team.eyebrow")}</Eyebrow>
+          <h2 className="mt-5 text-4xl font-bold text-charcoal uppercase sm:text-5xl">{t("inv.team.title")}</h2>
+          <p className="mt-6 font-display text-xl leading-relaxed text-burgundy italic">{t("inv.team.mission")}</p>
+        </div>
+        <div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {TEAM.map((m, i) => (
+              <div key={i} className="rounded-xl border border-border bg-warm-white p-5">
+                <div className="flex aspect-square items-center justify-center rounded-lg bg-surface-muted"><Users className="h-8 w-8 text-olive" aria-hidden /></div>
+                <p className="mt-4 font-display text-lg font-semibold text-charcoal">{m.name ?? t("inv.team.pending")}</p>
+                <p className="text-xs font-semibold tracking-wide text-burgundy uppercase">{t(m.roleKey)}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-xs text-charcoal/60">{t("inv.team.note")}</p>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* ─────────────── INVESTORS + PILOT ─────────────── */
+function Investors() {
+  const { t } = useI18n();
+  const { openDemo } = useDemo();
+  const pilot = usePilot();
+  return (
+    <section id="investors" className="scroll-mt-16 bg-burgundy py-24 text-ivory">
+      <Container className="max-w-7xl">
+        <Eyebrow light>{t("inv.inv.eyebrow")}</Eyebrow>
+        <h2 className="mt-5 max-w-4xl text-4xl font-bold uppercase sm:text-6xl">{t("inv.inv.title")}</h2>
+        <p className="mt-4 max-w-2xl text-lg text-ivory/80">{t("inv.inv.sub")}</p>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div key={n} className="rounded-xl border border-ivory/10 bg-burgundy-deep/60 p-6 transition-colors hover:border-gold/60">
+              <p className="font-display text-sm text-gold">0{n}</p>
+              <p className="mt-2 font-display text-xl font-semibold">{t(`inv.inv.${n}.t`)}</p>
+              <p className="mt-2 text-sm text-ivory/70">{t(`inv.inv.${n}.d`)}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Button size="lg" onClick={openDemo} className="bg-gold text-burgundy-deep hover:bg-gold/90">{t("inv.inv.cta")} <ArrowRight className="h-4 w-4" /></Button>
+        </div>
+
+        <div className="mt-20 grid gap-8 rounded-2xl bg-ivory p-8 text-charcoal sm:p-12 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          <div>
+            <h3 className="text-3xl font-bold sm:text-4xl">{t("inv.pilot.title")}</h3>
+            <p className="mt-3 text-charcoal/70">{t("inv.pilot.sub")}</p>
+            <div className="mt-5 flex flex-wrap gap-4 text-sm">
+              <a href={`mailto:${t("contact.email_value")}`} className="inline-flex items-center gap-2 font-semibold text-burgundy hover:underline"><Mail className="h-4 w-4" />{t("contact.email_value")}</a>
+              <a href="https://www.linkedin.com/company/nur-ai-platform" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-semibold text-burgundy hover:underline"><Linkedin className="h-4 w-4" />LinkedIn</a>
             </div>
           </div>
-        </motion.div>
+          <Button size="lg" onClick={pilot} className="justify-self-start lg:justify-self-end">{t("inv.pilot.cta")} <ArrowRight className="h-4 w-4" /></Button>
+        </div>
+        <p className="mt-16 text-center font-display text-2xl text-gold italic sm:text-3xl">{t("inv.closing")}</p>
+        <p className="mt-2 text-center text-sm font-semibold tracking-[0.2em] text-ivory/70 uppercase">{t("inv.hero.tagline")}</p>
       </Container>
     </section>
   );
 }
 
-/* ────────────────────────────  PAGE  ──────────────────────────── */
-
 function HomePage() {
-  const { openDemo } = useDemo();
   return (
     <>
-      <Hero onDemo={openDemo} />
-      <Problem />
-      <Solution />
-      <HowItWorks />
-      <WhoWeServe />
-      <Capabilities />
-      <Why />
-      <Security />
-      <FAQ />
-      <Insights />
-      <DemoCTA onDemo={openDemo} />
+      <Hero />
+      <Shield />
+      <How />
+      <VisionLab />
+      <Technology />
+      <Business />
+      <Impact />
+      <Team />
+      <Investors />
     </>
   );
 }
