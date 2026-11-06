@@ -52,7 +52,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/classic")({
   component: HomePage,
   head: () => ({
-    links: [{ rel: "canonical", href: "/" }],
+    meta: [{ title: "NUR.AI — Classic site (archived)" }, { name: "description", content: "Archived previous version of the NUR.AI website." }, { property: "og:title", content: "NUR.AI — Classic site" }, { property: "og:description", content: "Archived previous version of the NUR.AI website." }, { name: "robots", content: "noindex" }],
   }),
 });
 
