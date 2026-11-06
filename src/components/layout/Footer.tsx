@@ -2,6 +2,7 @@ import { Linkedin, Mail } from "lucide-react";
 import { Container } from "./Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useI18n } from "@/lib/i18n";
+import { Wordmark } from "@/components/brand/SunMark";
 
 export function Footer() {
   const { t } = useI18n();
@@ -10,17 +11,7 @@ export function Footer() {
     <footer className="mt-24 border-t border-border bg-surface">
       <Container className="grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground"
-            >
-              <span className="h-2 w-2 rounded-full bg-accent" />
-            </span>
-            <span className="text-base font-semibold tracking-tight text-foreground">
-              NUR<span className="text-secondary">.AI</span>
-            </span>
-          </div>
+          <Wordmark />
           <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
             {t("footer.mission")}
           </p>
