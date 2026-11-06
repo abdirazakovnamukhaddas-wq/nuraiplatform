@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { investorEn } from "./i18n-investor";
 
 export const LOCALES = ["uz", "en", "ru", "kk"] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -1002,6 +1003,7 @@ const kk: Dict = {
   "footer.rights": "Barlıq huqıqlar qorǵalǵan.",
 };
 
+Object.assign(en, investorEn);
 const dictionaries: Record<Locale, Dict> = { en, uz, ru, kk };
 
 type I18nContextValue = {
