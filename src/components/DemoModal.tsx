@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 type FormState = {
   institution: string;
@@ -207,6 +208,7 @@ export function DemoModal({
       }}
     >
       <DialogContent closeLabel={t("demo.f.close")} className="max-h-[92vh] overflow-y-auto sm:max-w-lg">
+        <div className="mr-6 flex justify-end"><LanguageSwitcher compact /></div>
         {status === "success" ? (
           <div className="flex flex-col items-center py-6 text-center animate-in fade-in-0 zoom-in-95 duration-300">
             <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-success">

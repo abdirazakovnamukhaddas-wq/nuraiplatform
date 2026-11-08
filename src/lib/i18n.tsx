@@ -1006,6 +1006,39 @@ const kk: Dict = {
 Object.assign(en, investorEn);
 Object.assign(uz, investorUz);
 Object.assign(ru, investorRu);
+Object.assign(en, {
+  "demo.f.err.length120": "Use no more than 120 characters.",
+  "demo.f.err.length160": "Use no more than 160 characters.",
+  "demo.f.err.length40": "Use no more than 40 characters.",
+  "demo.f.err.length200": "Use no more than 200 characters.",
+  "demo.f.err.length20": "Use no more than 20 characters.",
+  "demo.f.err.length1000": "Use no more than 1,000 characters.",
+  "inv.lab.name": "NUR.AI Vision Lab",
+  "inv.event.confirmed": "Confirmed",
+  "inv.event.dismissed": "Dismissed",
+});
+Object.assign(uz, {
+  "demo.f.err.length120": "120 belgidan oshmasin.",
+  "demo.f.err.length160": "160 belgidan oshmasin.",
+  "demo.f.err.length40": "40 belgidan oshmasin.",
+  "demo.f.err.length200": "200 belgidan oshmasin.",
+  "demo.f.err.length20": "20 belgidan oshmasin.",
+  "demo.f.err.length1000": "1 000 belgidan oshmasin.",
+  "inv.lab.name": "NUR.AI Vision Lab",
+  "inv.event.confirmed": "Tasdiqlandi",
+  "inv.event.dismissed": "Rad etildi",
+});
+Object.assign(ru, {
+  "demo.f.err.length120": "Не более 120 символов.",
+  "demo.f.err.length160": "Не более 160 символов.",
+  "demo.f.err.length40": "Не более 40 символов.",
+  "demo.f.err.length200": "Не более 200 символов.",
+  "demo.f.err.length20": "Не более 20 символов.",
+  "demo.f.err.length1000": "Не более 1 000 символов.",
+  "inv.lab.name": "NUR.AI Vision Lab",
+  "inv.event.confirmed": "Подтверждено",
+  "inv.event.dismissed": "Отклонено",
+});
 export const dictionaries: Record<Locale, Dict> = { en, uz, ru };
 for (const dict of Object.values(dictionaries)) {
   for (const key of ["hero.card.tag", "solution.tag", "footer.tagline", "inv.hero.tagline"]) {
@@ -1062,7 +1095,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [locale]);
 
   const value = useMemo<I18nContextValue>(() => {
-    const dict = dictionaries[locale];
     return {
       locale,
       setLocale: (l) => {

@@ -280,7 +280,7 @@ function VisionLab() {
 
         <motion.div variants={reveal} {...inView} className="mt-14 overflow-hidden rounded-2xl border border-gold/30 bg-burgundy-deep shadow-2xl">
           <div className="flex items-center justify-between border-b border-ivory/10 px-5 py-3">
-            <span className="inline-flex items-center gap-2 text-xs font-semibold"><Eye className="h-4 w-4 text-gold" /> NUR.AI Vision Lab</span>
+            <span className="inline-flex items-center gap-2 text-xs font-semibold"><Eye className="h-4 w-4 text-gold" /> {t("inv.lab.name")}</span>
             <Simulated />
           </div>
           <div className="grid lg:grid-cols-[1.6fr_1fr]">
@@ -297,7 +297,7 @@ function VisionLab() {
                 <div className="flex justify-between gap-4 border-b border-ivory/10 pb-2">
                   <dt className="text-ivory/60">{t("inv.lab.status")}</dt>
                   <dd className="font-semibold text-gold" aria-live="polite">
-                    {status === "pending" ? t("inv.lab.status.v") : status === "confirmed" ? t("inv.event.confirm") : t("inv.event.dismiss")}
+                    {status === "pending" ? t("inv.lab.status.v") : status === "confirmed" ? t("inv.event.confirmed") : t("inv.event.dismissed")}
                   </dd>
                 </div>
               </dl>
