@@ -115,8 +115,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE_TITLE },
       { name: "twitter:description", content: SITE_DESCRIPTION },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/kM6ps8ijE9RdgiIMxgvoAJwZMFv1/social-images/social-1784534033465-file_00000000c58881f49bc2e0eaa3775ea6.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/kM6ps8ijE9RdgiIMxgvoAJwZMFv1/social-images/social-1784534033465-file_00000000c58881f49bc2e0eaa3775ea6.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
