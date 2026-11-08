@@ -12,7 +12,7 @@ describe("language requirements", () => {
     for (const value of ["kk", "fr", "", null, undefined]) expect(isLocale(value)).toBe(false);
   });
   test("every English dictionary key is available in Uzbek and Russian", () => {
-    for (const locale of ["uz", "ru"] as const) {
+    for (const locale of ["uz", "ru"]) {
       for (const key of Object.keys(dictionaries.en)) {
         expect(dictionaries[locale][key], `${locale}: ${key}`).toBeTruthy();
       }
