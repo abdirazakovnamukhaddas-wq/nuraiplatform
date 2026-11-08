@@ -1,14 +1,14 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { investorEn } from "./i18n-investor";
+import { investorUz, investorRu } from "./i18n-investor-locales";
 
-export const LOCALES = ["uz", "en", "ru", "kk"] as const;
+export const LOCALES = ["en", "uz", "ru"] as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const LOCALE_LABELS: Record<Locale, { native: string; short: string }> = {
   uz: { native: "O‘zbekcha", short: "UZ" },
   en: { native: "English", short: "EN" },
   ru: { native: "Русский", short: "RU" },
-  kk: { native: "Qaraqalpaqsha", short: "KK" },
 };
 
 type Dict = Record<string, string>;
@@ -1004,7 +1004,47 @@ const kk: Dict = {
 };
 
 Object.assign(en, investorEn);
-const dictionaries: Record<Locale, Dict> = { en, uz, ru, kk };
+Object.assign(uz, investorUz);
+Object.assign(ru, investorRu);
+Object.assign(en, {
+  "demo.f.err.length120": "Use no more than 120 characters.",
+  "demo.f.err.length160": "Use no more than 160 characters.",
+  "demo.f.err.length40": "Use no more than 40 characters.",
+  "demo.f.err.length200": "Use no more than 200 characters.",
+  "demo.f.err.length20": "Use no more than 20 characters.",
+  "demo.f.err.length1000": "Use no more than 1,000 characters.",
+  "inv.lab.name": "NUR.AI Vision Lab",
+  "inv.event.confirmed": "Confirmed",
+  "inv.event.dismissed": "Dismissed",
+});
+Object.assign(uz, {
+  "demo.f.err.length120": "120 belgidan oshmasin.",
+  "demo.f.err.length160": "160 belgidan oshmasin.",
+  "demo.f.err.length40": "40 belgidan oshmasin.",
+  "demo.f.err.length200": "200 belgidan oshmasin.",
+  "demo.f.err.length20": "20 belgidan oshmasin.",
+  "demo.f.err.length1000": "1 000 belgidan oshmasin.",
+  "inv.lab.name": "NUR.AI Vision Lab",
+  "inv.event.confirmed": "Tasdiqlandi",
+  "inv.event.dismissed": "Rad etildi",
+});
+Object.assign(ru, {
+  "demo.f.err.length120": "Не более 120 символов.",
+  "demo.f.err.length160": "Не более 160 символов.",
+  "demo.f.err.length40": "Не более 40 символов.",
+  "demo.f.err.length200": "Не более 200 символов.",
+  "demo.f.err.length20": "Не более 20 символов.",
+  "demo.f.err.length1000": "Не более 1 000 символов.",
+  "inv.lab.name": "NUR.AI Vision Lab",
+  "inv.event.confirmed": "Подтверждено",
+  "inv.event.dismissed": "Отклонено",
+});
+export const dictionaries: Record<Locale, Dict> = { en, uz, ru };
+for (const dict of Object.values(dictionaries)) {
+  for (const key of ["hero.card.tag", "solution.tag", "footer.tagline", "inv.hero.tagline"]) {
+    dict[key] = "AI Assists. Humans Decide.";
+  }
+}
 
 type I18nContextValue = {
   locale: Locale;
@@ -1013,15 +1053,21 @@ type I18nContextValue = {
 };
 
 const I18nContext = createContext<I18nContextValue | null>(null);
-const STORAGE_KEY = "nurai.locale";
+export const STORAGE_KEY = "nurai.locale";
+export function isLocale(value: unknown): value is Locale {
+  return typeof value === "string" && LOCALES.some((locale) => locale === value);
+}
+export function translate(locale: Locale, key: string): string {
+  return dictionaries[locale][key] ?? dictionaries.en[key] ?? "";
+}
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("en");
 
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem(STORAGE_KEY) as Locale | null;
-      if (saved && (LOCALES as readonly string[]).includes(saved)) {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      if (isLocale(saved)) {
         setLocaleState(saved);
       }
     } catch {
@@ -1037,8 +1083,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const description = dict["meta.description"] ?? dictionaries.en["meta.description"];
       if (title) document.title = title;
       const setMeta = (selector: string, value: string) => {
-        const el = document.head.querySelector<HTMLMetaElement>(selector);
-        if (el) el.setAttribute("content", value);
+        document.head.querySelectorAll<HTMLMetaElement>(selector).forEach((el) => el.setAttribute("content", value));
       };
       setMeta('meta[name="description"]', description);
       setMeta('meta[property="og:title"]', title);
@@ -1050,10 +1095,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [locale]);
 
   const value = useMemo<I18nContextValue>(() => {
-    const dict = dictionaries[locale];
     return {
       locale,
       setLocale: (l) => {
+        if (!isLocale(l)) return;
         setLocaleState(l);
         try {
           window.localStorage.setItem(STORAGE_KEY, l);
@@ -1061,7 +1106,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
           /* noop */
         }
       },
-      t: (key) => dict[key] ?? dictionaries.en[key] ?? key,
+      t: (key) => translate(locale, key),
     };
   }, [locale]);
 

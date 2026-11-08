@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 type FormState = {
   institution: string;
@@ -67,23 +68,23 @@ const REQUIRED: (keyof FormState)[] = [
   "consent",
 ];
 
-function buildSchema(t: (k: string) => string) {
+function buildSchema() {
   return z.object({
-    institution: z.string().trim().min(1, t("demo.f.err.institution")).max(120),
-    rep: z.string().trim().min(1, t("demo.f.err.rep")).max(120),
-    role: z.string().trim().min(1, t("demo.f.err.role")).max(120),
-    email: z.string().trim().email(t("demo.f.err.email")).max(160),
+    institution: z.string().trim().min(1, "demo.f.err.institution").max(120, "demo.f.err.length120"),
+    rep: z.string().trim().min(1, "demo.f.err.rep").max(120, "demo.f.err.length120"),
+    role: z.string().trim().min(1, "demo.f.err.role").max(120, "demo.f.err.length120"),
+    email: z.string().trim().email("demo.f.err.email").max(160, "demo.f.err.length160"),
     phone: z
       .string()
       .trim()
-      .min(3, t("demo.f.err.phone"))
-      .max(40)
-      .regex(/^[+\d][\d\s\-().]{2,}$/, t("demo.f.err.phone")),
-    type: z.string().min(1, t("demo.f.err.type")),
-    cameras: z.string().max(200).optional(),
-    children: z.string().max(20).optional(),
-    message: z.string().trim().max(1000).optional(),
-    consent: z.literal(true, { message: t("demo.f.err.consent") }),
+      .min(3, "demo.f.err.phone")
+      .max(40, "demo.f.err.length40")
+      .regex(/^[+\d][\d\s\-().]{2,}$/, "demo.f.err.phone"),
+    type: z.string().min(1, "demo.f.err.type"),
+    cameras: z.string().max(200, "demo.f.err.length200").optional(),
+    children: z.string().max(20, "demo.f.err.length20").optional(),
+    message: z.string().trim().max(1000, "demo.f.err.length1000").optional(),
+    consent: z.literal(true, { message: "demo.f.err.consent" }),
   });
 }
 
@@ -113,7 +114,7 @@ export function DemoModal({
     setForm((f) => ({ ...f, [k]: v }));
     if (touched[k] || errors[k]) {
       // re-validate this field live
-      const schema = buildSchema(t);
+      const schema = buildSchema();
       const next = { ...form, [k]: v };
       const parsed = schema.safeParse(next);
       if (parsed.success) {
@@ -127,7 +128,7 @@ export function DemoModal({
 
   const markTouched = (k: keyof FormState) => {
     setTouched((s) => ({ ...s, [k]: true }));
-    const schema = buildSchema(t);
+    const schema = buildSchema();
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
       const issue = parsed.error.issues.find((i) => i.path[0] === k);
@@ -144,7 +145,7 @@ export function DemoModal({
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const schema = buildSchema(t);
+    const schema = buildSchema();
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
       const next: Errors = {};
@@ -206,18 +207,19 @@ export function DemoModal({
         if (!v) window.setTimeout(resetAll, 200);
       }}
     >
-      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent closeLabel={t("demo.f.close")} className="max-h-[92vh] overflow-y-auto sm:max-w-lg">
+        <div className="mr-6 flex justify-end"><LanguageSwitcher compact /></div>
         {status === "success" ? (
           <div className="flex flex-col items-center py-6 text-center animate-in fade-in-0 zoom-in-95 duration-300">
             <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-success">
               <CheckCircle2 className="h-7 w-7" aria-hidden />
             </span>
-            <h3 className="mt-4 text-xl font-semibold text-foreground">
+            <DialogTitle className="mt-4 text-xl font-semibold text-foreground">
               {t("demo.f.success.title")}
-            </h3>
-            <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            </DialogTitle>
+            <DialogDescription className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
               {t("demo.f.success.body")}
-            </p>
+            </DialogDescription>
             <Button className="mt-6" onClick={() => onOpenChange(false)}>
               {t("demo.f.close")}
             </Button>
@@ -227,12 +229,12 @@ export function DemoModal({
             <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
               <AlertCircle className="h-7 w-7" aria-hidden />
             </span>
-            <h3 className="mt-4 text-xl font-semibold text-foreground">
+            <DialogTitle className="mt-4 text-xl font-semibold text-foreground">
               {t("demo.f.error.title")}
-            </h3>
-            <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            </DialogTitle>
+            <DialogDescription className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
               {t("demo.f.error.body")}
-            </p>
+            </DialogDescription>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
               <Button onClick={() => setStatus("idle")}>{t("demo.f.retry")}</Button>
               <Button variant="outline" onClick={() => onOpenChange(false)}>
@@ -423,7 +425,7 @@ export function DemoModal({
                 </label>
                 {touched.consent && errors.consent ? (
                   <p id={errId("consent")} className="pl-7 text-xs text-destructive">
-                    {errors.consent}
+                    {t(errors.consent)}
                   </p>
                 ) : null}
               </div>
@@ -463,6 +465,7 @@ function Field({
   error?: string;
   children: React.ReactNode;
 }) {
+  const { t } = useI18n();
   return (
     <div className="grid gap-1.5">
       <Label htmlFor={id} className="flex items-center gap-1">
@@ -476,7 +479,7 @@ function Field({
       {children}
       {error ? (
         <p id={`err-${id}`} className="text-xs text-destructive">
-          {error}
+          {t(error)}
         </p>
       ) : null}
     </div>
