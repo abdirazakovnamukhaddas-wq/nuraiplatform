@@ -83,7 +83,9 @@ export function Navbar({ onRequestDemo: _ }: { onRequestDemo: () => void }) {
           <Button size="sm" className="hidden sm:inline-flex" onClick={demo}>
             {t("inv.cta.demo")}
           </Button>
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             type="button"
             aria-label={open ? t("nav.close_menu") : t("nav.open_menu")}
             aria-expanded={open}
@@ -91,7 +93,7 @@ export function Navbar({ onRequestDemo: _ }: { onRequestDemo: () => void }) {
             className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-charcoal xl:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
+          </Button>
         </div>
       </Container>
       <div className={cn("grid overflow-hidden transition-[grid-template-rows] duration-200 xl:hidden", open ? "grid-rows-[1fr] border-t border-border" : "grid-rows-[0fr]")}>
