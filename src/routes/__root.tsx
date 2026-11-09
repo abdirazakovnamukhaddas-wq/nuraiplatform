@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -46,11 +47,11 @@ function NotFoundInner() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   return (
     <I18nProvider>
-      <ErrorInner error={error} reset={reset} />
+      <ErrorInner error={error instanceof Error ? error : new Error(String(error))} reset={reset} />
     </I18nProvider>
   );
 }
