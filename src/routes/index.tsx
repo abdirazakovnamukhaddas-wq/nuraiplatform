@@ -13,15 +13,18 @@ import { useI18n } from "@/lib/i18n";
 import { BASE44, IS_DEV } from "@/lib/base44";
 import { cn } from "@/lib/utils";
 import heroImg from "@/assets/kindergarten_classroom_hero.jpg";
+import { investorEn } from "@/lib/i18n-investor";
+import { productCopy } from "@/lib/i18n-product";
+import { PRODUCT_STATUS } from "@/lib/product-status";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "NUR.AI — AI Safety Intelligence for Kindergartens" },
-      { name: "description", content: "NUR.AI is building an intelligent safety assistant that helps kindergarten educators notice important moments and review potential risks. AI Assists. Humans Decide." },
-      { property: "og:title", content: "NUR.AI — Upgrading Kindergarten Safety with AI" },
-      { property: "og:description", content: "From passive cameras to proactive safety intelligence — with educators always in control." },
+      { title: productCopy.en["meta.title"] },
+      { name: "description", content: productCopy.en["meta.description"] },
+      { property: "og:title", content: productCopy.en["meta.title"] },
+      { property: "og:description", content: productCopy.en["meta.description"] },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -337,7 +340,7 @@ function Technology() {
   return (
     <section id="technology" className="scroll-mt-16 bg-ivory py-24">
       <Container className="max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+        <div data-little-moments-status={PRODUCT_STATUS.littleMoments} className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <SectionNumber n="04" />
             <h2 className="-mt-6 text-4xl font-bold text-charcoal uppercase sm:text-5xl">{t("inv.tech.title")}</h2>
@@ -345,7 +348,7 @@ function Technology() {
             <div className="mt-8 space-y-3">
               {status.map((s) => (
                 <div key={s.k} className="flex items-start gap-4 rounded-lg bg-warm-white p-4 shadow-sm">
-                  <span className={cn("shrink-0 rounded-full px-3 py-1 text-[11px] font-bold tracking-wide uppercase", s.tone)}>{t(`inv.tech.${s.k}`)}</span>
+                  <span className={cn("max-w-[45%] shrink-0 rounded-full px-3 py-1 text-[11px] font-bold tracking-wide uppercase", s.tone)}>{t(`inv.tech.${s.k}`)}</span>
                   <p className="text-sm text-charcoal/75">{t(`inv.tech.${s.k}d`)}</p>
                 </div>
               ))}
@@ -501,7 +504,7 @@ function Investors() {
             <h3 className="text-3xl font-bold sm:text-4xl">{t("inv.pilot.title")}</h3>
             <p className="mt-3 text-charcoal/70">{t("inv.pilot.sub")}</p>
             <div className="mt-5 flex flex-wrap gap-4 text-sm">
-              <a href={`mailto:${t("contact.email_value")}`} className="inline-flex items-center gap-2 font-semibold text-burgundy hover:underline"><Mail className="h-4 w-4" />{t("contact.email_value")}</a>
+              <a href={`mailto:${t("contact.email_value")}`} className="inline-flex min-w-0 items-center gap-2 break-all font-semibold text-burgundy hover:underline"><Mail className="h-4 w-4 shrink-0" />{t("contact.email_value")}</a>
               <a href="https://www.linkedin.com/company/nur-ai-platform" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-semibold text-burgundy hover:underline"><Linkedin className="h-4 w-4" />LinkedIn</a>
             </div>
           </div>
