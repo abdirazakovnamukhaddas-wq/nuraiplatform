@@ -1,5 +1,5 @@
-# Multilingual update
-- [ ] Complete EN/UZ/RU translations and language persistence.
-- [ ] Localize validation and shared accessible controls without resetting forms.
-- [ ] Verify desktop/mobile language cycle, refresh, form state, and translation coverage.
-- [ ] Apply required package security update and check preview errors.
+# NUR.AI branding and language update
+- [ ] Replace visible branding and favicon with uploaded logo artwork.
+- [ ] Complete EN/UZ/RU language switching, persistence, and legal pages.
+- [ ] Clarify kindergarten safety, prototype limitations, and planned Little Moments.
+- [ ] Verify desktop/mobile navigation, language cycle, refresh, and form validation without changing integrations.
