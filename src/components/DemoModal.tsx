@@ -186,6 +186,7 @@ export function DemoModal({
   };
 
   const types = [
+    { v: "kindergarten", l: t("demo.f.type.kindergarten") },
     { v: "rehab", l: t("demo.f.type.rehab") },
     { v: "school", l: t("demo.f.type.school") },
     { v: "health", l: t("demo.f.type.health") },
@@ -410,7 +411,8 @@ export function DemoModal({
 
               <div className="grid gap-1">
                 <label className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <Checkbox
+                <Checkbox
+                    aria-label={t("demo.f.consent")}
                     checked={form.consent}
                     onCheckedChange={(v) => {
                       update("consent", v === true);

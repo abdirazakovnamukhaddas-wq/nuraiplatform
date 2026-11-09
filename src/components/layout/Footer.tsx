@@ -1,4 +1,5 @@
 import { Linkedin, Mail } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Container } from "./Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useI18n } from "@/lib/i18n";
@@ -53,14 +54,14 @@ export function Footer() {
 
           <ul className="space-y-2 text-muted-foreground">
             <li>
-              <a href="#" className="hover:text-foreground">
+              <Link to="/privacy" className="hover:text-foreground">
                 {t("footer.privacy")}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-foreground">
+              <Link to="/terms" className="hover:text-foreground">
                 {t("footer.terms")}
-              </a>
+              </Link>
             </li>
           </ul>
           <div className="mt-4">

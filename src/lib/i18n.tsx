@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { investorEn } from "./i18n-investor";
 import { investorUz, investorRu } from "./i18n-investor-locales";
+import { productCopy } from "./i18n-product";
+import { useRouterState } from "@tanstack/react-router";
 
 export const LOCALES = ["en", "uz", "ru"] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -1040,6 +1042,7 @@ Object.assign(ru, {
   "inv.event.dismissed": "Отклонено",
 });
 export const dictionaries: Record<Locale, Dict> = { en, uz, ru };
+for (const locale of LOCALES) Object.assign(dictionaries[locale], productCopy[locale]);
 for (const dict of Object.values(dictionaries)) {
   for (const key of ["hero.card.tag", "solution.tag", "footer.tagline", "inv.hero.tagline"]) {
     dict[key] = "AI Assists. Humans Decide.";
@@ -1063,6 +1066,7 @@ export function translate(locale: Locale, key: string): string {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("en");
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
 
   useEffect(() => {
     try {
@@ -1079,8 +1083,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (typeof document !== "undefined") {
       document.documentElement.lang = locale;
       const dict = dictionaries[locale];
-      const title = dict["meta.title"] ?? dictionaries.en["meta.title"];
-      const description = dict["meta.description"] ?? dictionaries.en["meta.description"];
+      const legalKind = pathname === "/privacy" ? "privacy" : pathname === "/terms" ? "terms" : null;
+      const title = legalKind ? `NUR.AI — ${translate(locale, `footer.${legalKind}`)}` : translate(locale, pathname === "/classic" ? "classic.meta.title" : "meta.title");
+      const description = translate(locale, legalKind ? `legal.${legalKind}.description` : pathname === "/classic" ? "classic.meta.description" : "meta.description");
       if (title) document.title = title;
       const setMeta = (selector: string, value: string) => {
         document.head.querySelectorAll<HTMLMetaElement>(selector).forEach((el) => el.setAttribute("content", value));
@@ -1092,7 +1097,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       setMeta('meta[name="twitter:title"]', title);
       setMeta('meta[name="twitter:description"]', description);
     }
-  }, [locale]);
+  }, [locale, pathname]);
 
   const value = useMemo<I18nContextValue>(() => {
     return {
